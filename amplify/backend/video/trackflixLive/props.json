@@ -1,0 +1,10 @@
+{
+    "shared": {
+        "resourceName": "trackflixLive",
+        "bucket": "amplify-trackflix-trackflix-104125-deployment"
+    },
+    "channel": {
+        "channelQuality": "STANDARD",
+        "channelLatency": "LOW"
+    }
+}

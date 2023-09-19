@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "trackflixAPI": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
