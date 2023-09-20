@@ -1,4 +1,11 @@
-## Project architecture
+## Project overview
+
+TrackFlix is a tool to organize your video content
+
+## Features
+  - Video Player
+  - Video Preview
+  - Background Showcase
 
 This repository contains a two applications, this is a monorepo.
 
