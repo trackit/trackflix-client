@@ -50,43 +50,33 @@ export const listVideoOnDemands = /* GraphQL */ `
 `
 
 async function fetchVodFiles(nextToken: string | null) {
-    if (nextToken !== null && nextToken !== '')
-        return API.graphql({
-            query: listVideoOnDemands,
-            variables: {
-                nextToken,
-            },
-            authMode: await getAuthMode(),
-        }) as GraphQLResult<APIt.ListVideoOnDemandsQuery>
-    else
-        return API.graphql({
-            query: listVideoOnDemands,
-            authMode: await getAuthMode(),
-        }) as GraphQLResult<APIt.ListVideoOnDemandsQuery>
+    // if (nextToken !== null && nextToken !== '')
+    //     return API.graphql({
+    //         query: listVideoOnDemands,
+    //         variables: {
+    //             nextToken,
+    //         },
+    //         authMode: await getAuthMode(),
+    //     }) as GraphQLResult<APIt.ListVideoOnDemandsQuery>
+    // else
+    //     return API.graphql({
+    //         query: listVideoOnDemands,
+    //         authMode: await getAuthMode(),
+    //     }) as GraphQLResult<APIt.ListVideoOnDemandsQuery>
 }
 
 async function fetchHighlightedVideos() {
-    return API.graphql({
-        query: listMedia,
-        variables: {
-            filter: {
-                highlighted: {
-                    eq: true,
-                },
-            },
-        },
-        authMode: await getAuthMode(),
-    }) as GraphQLResult<APIt.GetVideoOnDemandQuery>
+    return [{}] as GraphQLResult<APIt.GetVideoOnDemandQuery>
 }
 
 async function fetchVodAsset(id: string) {
-    return API.graphql({
-        query: getVideoOnDemand,
-        variables: {
-            id,
-        },
-        authMode: await getAuthMode(),
-    }) as GraphQLResult<APIt.GetVideoOnDemandQuery>
+    // return API.graphql({
+    //     query: getVideoOnDemand,
+    //     variables: {
+    //         id,
+    //     },
+    //     authMode: await getAuthMode(),
+    // }) as GraphQLResult<APIt.GetVideoOnDemandQuery>
 }
 
 export const listVodSections = /* GraphQL */ `
@@ -156,13 +146,13 @@ export type ListVodSections = {
 }
 
 async function fetchVodSections(id: string) {
-    return API.graphql({
-        query: listVodSections,
-        variables: {
-            id: id,
-        },
-        authMode: await getAuthMode(),
-    }) as GraphQLResult<ListVodSections>
+    // return API.graphql({
+    //     query: listVodSections,
+    //     variables: {
+    //         id: id,
+    //     },
+    //     authMode: await getAuthMode(),
+    // }) as GraphQLResult<ListVodSections>
 }
 
 export {

@@ -4,7 +4,6 @@ import { fetchHighlightedVideos } from '../api'
 import ReactPlayer from 'react-player'
 import { navigate } from 'gatsby'
 import intro from '../../videos/introduction-video.mp4'
-import awsvideoconfig from '../../aws-video-exports'
 import PlayLogo from '../../assets/logo/logo-play-without-circle.svg'
 import { screenSizes } from '../constants'
 import { useWindowDimensions } from '../hooks'
@@ -111,11 +110,14 @@ const Landing = () => {
             ) {
                 const media = highlightedVideos.data.listMedia.items[0]
                 setVideo(media)
-                setSource(
-                    `https://${awsvideoconfig.awsOutputVideo}/public/${media.id}/${media.id}.m3u8`
-                )
+                setSource(media.source)
             } else {
-                setSource(intro)
+                // test purpose, to replace later
+                setSource(
+                    'https://dzmkyt5xmjxxq.cloudfront.net/public/fdcbf258-ee64-466e-aa08-4ac06cf69117/fdcbf258-ee64-466e-aa08-4ac06cf69117.m3u8'
+                )
+                //
+                // setSource(intro)
             }
         }
         fetchHighlited()

@@ -1,4 +1,3 @@
-import { withAuthenticator } from '@aws-amplify/ui-react'
 import { navigate } from 'gatsby'
 
 const Login = ({ location }) => {
@@ -7,4 +6,4 @@ const Login = ({ location }) => {
     return null
 }
 
-export default withAuthenticator(Login)
+export default Login

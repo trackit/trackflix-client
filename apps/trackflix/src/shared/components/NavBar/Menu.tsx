@@ -42,17 +42,17 @@ const Menu = ({ navbarTheme, navBarHeight, minHeight }) => {
     const [hovered, setHovered] = useState(false)
     const { width } = useWindowDimensions()
 
-    useEffect(() => {
-        Auth.Credentials.get().then(() => {
-            if (Auth.Credentials.getCredSource() === 'userPool') {
-                Auth.currentSession().then((data) => {
-                    const groupsData =
-                        data.getIdToken().payload['cognito:groups']
-                    if (groupsData !== undefined) setGroups(groupsData)
-                })
-            }
-        })
-    }, [])
+    // useEffect(() => {
+    //     Auth.Credentials.get().then(() => {
+    //         if (Auth.Credentials.getCredSource() === 'userPool') {
+    //             Auth.currentSession().then((data) => {
+    //                 const groupsData =
+    //                     data.getIdToken().payload['cognito:groups']
+    //                 if (groupsData !== undefined) setGroups(groupsData)
+    //             })
+    //         }
+    //     })
+    // }, [])
 
     const dropdownmode = width <= screenSizes.m
 

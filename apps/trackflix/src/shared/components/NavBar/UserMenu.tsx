@@ -55,11 +55,12 @@ const UserMenu = ({ navbarTheme, dropdownmode }) => {
     const location = useLocation()
 
     const updateAuthState = () => {
-        Auth.Credentials.get().then(() => {
-            if (Auth.Credentials.getCredSource() === 'userPool') {
-                setSignedIn(true)
-            }
-        })
+        console.log('removed implementation of updateAuthState')
+        // Auth.Credentials.get().then(() => {
+        //     if (Auth.Credentials.getCredSource() === 'userPool') {
+        //         setSignedIn(true)
+        //     }
+        // })
     }
 
     useEffect(updateAuthState, [])
@@ -81,15 +82,15 @@ const UserMenu = ({ navbarTheme, dropdownmode }) => {
     }
 
     const handleClick = () => {
-        if (signedIn) {
-            Auth.signOut()
-            setSignedIn(false)
-            window.location.reload(false)
-        } else {
-            navigate('/login', {
-                state: { redirectTo: location.pathname },
-            })
-        }
+        // if (signedIn) {
+        //     Auth.signOut()
+        //     setSignedIn(false)
+        //     window.location.reload(false)
+        // } else {
+        //     navigate('/login', {
+        //         state: { redirectTo: location.pathname },
+        //     })
+        // }
     }
 
     if (dropdownmode && signedIn)

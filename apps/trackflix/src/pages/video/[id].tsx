@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { PageProps } from 'gatsby'
 import moment from 'moment'
-import awsvideoconfig from '../../aws-video-exports'
 import { fetchVodAsset } from '../../shared/api/vod-fetch'
 import { fetchMediasSectionsFiltered } from '../../shared/api'
 import Layout from '../../shared/components/Layout'
@@ -23,7 +22,7 @@ const VideoPlayer = ({ video }: VideoPlayerProps) => {
         controls: true,
         sources: [
             {
-                src: `https://${awsvideoconfig.awsOutputVideo}/public/${video?.id}/${video?.id}.m3u8`,
+                src: `${video?.src}`,
                 type: 'application/x-mpegURL',
             },
         ],

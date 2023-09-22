@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from '@reach/router'
-import Amplify from 'aws-amplify'
 import styled, { ThemeProvider } from 'styled-components'
 import { Helmet } from 'react-helmet'
 import { graphql, useStaticQuery } from 'gatsby'
 import NavBar from '../NavBar'
 import theme, { Index } from '../../theme'
-import awsmobile from '../../../aws-exports'
 import Footer from '../Footer'
-
-Amplify.configure(awsmobile)
 
 type SEOProps = {
     title?: string

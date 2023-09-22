@@ -3,7 +3,7 @@ module.exports = {
         title: 'Trackflix',
         titleTemplate: '%s',
         description: 'Trackflix is a VOD website made by Trackit.',
-        url: 'https://amplify-video-community.trackit.io',
+        url: 'https://trackflix.trackit.io',
         image: 'src/images/favicon.png',
         twitterUsername: '@TrackItCloud',
     },

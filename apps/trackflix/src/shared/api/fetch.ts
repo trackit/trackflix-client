@@ -12,7 +12,6 @@ import {
     getVideoOnDemand,
 } from '../../graphql/queries'
 import { callManageResourcesLambda } from './mutate'
-import awsmobile from '../../aws-exports'
 import * as APIt from '../../API'
 import { Media } from '../../models'
 import { getAuthMode } from './helper'
@@ -37,13 +36,14 @@ async function fetchSection(id: string) {
 }
 
 async function fetchThumbnail(media: Media | undefined) {
-    return Storage.get(
-        `thumbnails/${media?.thumbnail?.id}.${media?.thumbnail?.ext}`,
-        {
-            bucket: awsmobile.aws_user_files_s3_bucket,
-            level: 'public',
-        }
-    )
+    console.log('removed implementation (fetchThumbnail)')
+    // return Storage.get(
+    //     `thumbnails/${media?.thumbnail?.id}.${media?.thumbnail?.ext}`,
+    //     {
+    //         bucket: awsmobile.aws_user_files_s3_bucket,
+    //         level: 'public',
+    //     }
+    // )
 }
 
 async function fetchMedias(nextToken: string | undefined = undefined) {

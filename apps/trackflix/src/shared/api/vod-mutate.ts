@@ -1,4 +1,4 @@
-import { API, graphqlOperation, Storage } from 'aws-amplify'
+import { API, graphqlOperation } from 'aws-amplify'
 import { GraphQLResult } from '@aws-amplify/api-graphql'
 import { createVideoOnDemand } from '../../graphql/mutations'
 import {
@@ -7,17 +7,15 @@ import {
     setThumbnail,
     setMedia,
 } from './mutate'
-import awsvideoconfig from '../../aws-video-exports'
-import awsmobile from '../../aws-exports'
 import * as APIt from '../../API'
 import { Media, Thumbnail } from '../../models'
 
 async function createVOD(payload: APIt.CreateVideoOnDemandInput) {
-    return API.graphql(
-        graphqlOperation(createVideoOnDemand, {
-            input: payload,
-        })
-    ) as GraphQLResult<APIt.CreateVideoOnDemandMutation>
+    // return API.graphql(
+    //     graphqlOperation(createVideoOnDemand, {
+    //         input: payload,
+    //     })
+    // ) as GraphQLResult<APIt.CreateVideoOnDemandMutation>
 }
 
 async function putVodFile(
@@ -26,11 +24,12 @@ async function putVodFile(
     vodExtension: string[],
     progressCallback
 ) {
-    return Storage.put(`${id}.${vodExtension[vodExtension.length - 1]}`, file, {
-        bucket: awsvideoconfig.awsInputVideo,
-        region: awsmobile.aws_project_region,
-        progressCallback,
-    })
+    console.log('removed implemntation (putVodFile)')
+    // return Storage.put(`${id}.${vodExtension[vodExtension.length - 1]}`, file, {
+    //     bucket: awsvideoconfig.awsInputVideo,
+    //     region: awsmobile.aws_project_region,
+    //     progressCallback,
+    // })
 }
 
 const updateThumbnail = async (

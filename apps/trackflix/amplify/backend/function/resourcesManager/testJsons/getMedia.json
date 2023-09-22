@@ -1,8 +1,0 @@
-{
-  "arguments": {
-    "input": {
-      "query": "getMedia",
-      "params": "{ \"id\": \"942bb152-feda-44e1-a0b0-0a7f5fcbb5ad\" }"
-    }
-  }
-}
