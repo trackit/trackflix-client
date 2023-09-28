@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Layout from '../shared/components/Layout'
 import Landing from '../shared/home/Landing'
 import Videos from '../shared/videos'
 import defaultTheme, { NavbarTheme, defaultNavbar } from '../shared/theme'
+import { CMSContext } from '../context/CMSContext'
 
 const noScrollNavBarTheme: NavbarTheme = {
     type: 'noScroll',
@@ -27,6 +28,8 @@ const HomePage = () => {
             navbar: noScrollNavBarTheme,
         },
     })
+    const apiContext = useContext(CMSContext)
+
     const handleScroll = () => {
         if (window.pageYOffset > 20 && theme.palette.navbar.type !== 'scroll') {
             setTheme({
@@ -61,8 +64,10 @@ const HomePage = () => {
 
     return (
         <Layout overrideTheme={theme} removePaddingTop>
-            <Landing />
-            <Videos />
+            <CMSContext.Provider value={apiContext}>
+                <Landing />
+                <Videos />
+            </CMSContext.Provider>
         </Layout>
     )
 }

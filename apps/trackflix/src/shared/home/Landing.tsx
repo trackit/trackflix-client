@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { fetchHighlightedVideos } from '../api'
 import ReactPlayer from 'react-player'
@@ -7,6 +7,8 @@ import intro from '../../videos/introduction-video.mp4'
 import PlayLogo from '../../assets/logo/logo-play-without-circle.svg'
 import { screenSizes } from '../constants'
 import { useWindowDimensions } from '../hooks'
+import { CMSContext } from '../../context/CMSContext'
+import { VideoOnDemand } from '../../api/api.interface'
 
 const LandingContainer = styled.div`
     width: 100%;
@@ -95,29 +97,19 @@ const StyledPlayLogo = styled(PlayLogo)`
 
 const Landing = () => {
     const [source, setSource] = useState<string | null>(null)
-    const [video, setVideo] = useState(null)
+    const [video, setVideo] = useState<VideoOnDemand | null>(null)
     const { width } = useWindowDimensions()
+    const { api } = useContext(CMSContext)
 
     useEffect(() => {
         const fetchHighlited = async () => {
-            const highlightedVideos = await fetchHighlightedVideos()
-            if (
-                highlightedVideos &&
-                highlightedVideos.data &&
-                highlightedVideos.data.listMedia &&
-                highlightedVideos.data.listMedia.items &&
-                highlightedVideos.data.listMedia.items.length > 0
-            ) {
-                const media = highlightedVideos.data.listMedia.items[0]
+            const highlightedVideos = await api.fetchHighlightedVideos()
+            if (highlightedVideos && highlightedVideos.length > 0) {
+                const media = highlightedVideos[0]
                 setVideo(media)
-                setSource(media.source)
+                setSource(media.src)
             } else {
-                // test purpose, to replace later
-                setSource(
-                    'https://dzmkyt5xmjxxq.cloudfront.net/public/fdcbf258-ee64-466e-aa08-4ac06cf69117/fdcbf258-ee64-466e-aa08-4ac06cf69117.m3u8'
-                )
-                //
-                // setSource(intro)
+                setSource(intro)
             }
         }
         fetchHighlited()
