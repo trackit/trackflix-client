@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useContext } from 'react'
 import styled from 'styled-components'
 import { AiOutlineSearch } from 'react-icons/ai'
 import Layout from '../shared/components/Layout'
-import { fetchThumbnail, fetchVodFiles } from '../shared/api'
-import { VideoOnDemand, Thumbnail } from '../models'
+import { VideoOnDemand } from '../api/api.interface'
+import { Thumbnail } from '../models'
 import VideoCard from '../shared/components/Card/VideoCard'
 import { screenSizes, defaultVideoCardProperties } from '../shared/constants'
 import { useWindowDimensions } from '../shared/hooks'
+import { CMSContext } from '../context/CMSContext'
 
 const StyledSearchItem = styled.div`
     display: flex;
@@ -78,18 +79,17 @@ const StyledVideoCard = styled.div`
 `
 
 type VideoItemProps = {
-    asset: VideoOnDemand
+    vod: VideoOnDemand
 }
 
 const VideoItem = ({ vod }: VideoItemProps) => {
-    const [thumbnail, setThumbnail] =
-        useState<
-            | {
-                  obj: Thumbnail
-                  url: string
-              }
-            | undefined
-        >(undefined)
+    const [thumbnail, setThumbnail] = useState<
+        | {
+              obj: Thumbnail
+              url: string
+          }
+        | undefined
+    >(undefined)
     const { width } = useWindowDimensions()
     const videoCardProperties = useMemo(() => {
         if (defaultVideoCardProperties.width > width - 100) {
@@ -101,19 +101,18 @@ const VideoItem = ({ vod }: VideoItemProps) => {
         }
         return defaultVideoCardProperties
     }, [width])
+    const { api } = useContext(CMSContext)
 
     useEffect(() => {
         ;(async () => {
             try {
-                if (vod.media?.thumbnail) {
-                    const data = await fetchThumbnail(vod.media)
-                    setThumbnail({
-                        obj: vod.media?.thumbnail,
-                        url: data as string,
-                    })
-                }
+                const data = await api.fetchThumbnail(vod.id)
+                setThumbnail({
+                    obj: data,
+                    url: data?.src as string,
+                })
             } catch (error) {
-                console.error('search.tsx(fetchThumbnail):')
+                console.error('search.tsx(fetchThumbnail):', error)
             }
         })()
     }, [vod])
@@ -135,25 +134,20 @@ const SearchPage = () => {
     const [nextToken, setNextToken] = useState<string | null>(null)
     const [searchValue, setSearchValue] = useState<string>('')
     const { width } = useWindowDimensions()
+    const { api } = useContext(CMSContext)
 
     const filterAssets = (elem: VideoOnDemand) =>
         elem.media?.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-        elem.media?.description
-            .toLowerCase()
+        elem?.media?.description
+            ?.toLowerCase()
             .includes(searchValue.toLowerCase())
 
     useEffect(() => {
         ;(async () => {
             try {
-                const { data } = await fetchVodFiles(nextToken)
-                setNextToken(
-                    data?.listVideoOnDemands?.nextToken
-                        ? data.listVideoOnDemands.nextToken
-                        : null
-                )
-                setVodAssets(
-                    data?.listVideoOnDemands?.items as Array<VideoOnDemand>
-                )
+                const response = await api.fetchVodFiles(nextToken)
+                setNextToken(response?.nextToken ? response?.nextToken : null)
+                setVodAssets(response.data)
             } catch (error) {
                 console.error('search.tsx(fetchVodFiles):', error)
             }

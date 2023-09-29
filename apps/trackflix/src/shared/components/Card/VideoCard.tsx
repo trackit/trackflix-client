@@ -3,8 +3,25 @@ import styled from 'styled-components'
 import { navigate } from 'gatsby'
 import TrackitLogo from '../../../assets/logo/trackit-colored.svg'
 import Thumbnail from '../Thumbnail'
+import {
+    Thumbnail as IThumbnail,
+    VideoOnDemand,
+} from '../../../api/api.interface'
 
-export const VideoCardContainer = styled.div`
+interface VideoStatus {
+    playing: boolean
+    played: number
+    loaded: number
+    duration: number
+    seeking: boolean
+}
+
+export const VideoCardContainer = styled.div<{
+    playing: boolean
+    videoInfos: string
+    width: number
+    height: number
+}>`
     display: flex;
     flex-direction: column;
     width: ${({ width }) => width}px;
@@ -22,7 +39,10 @@ export const VideoCardContainer = styled.div`
     z-index: ${({ playing }) => (playing ? 6 : 5)};
 `
 
-const VideoCardGivenChildrenContainer = styled.div`
+const VideoCardGivenChildrenContainer = styled.div<{
+    playing: boolean
+    width: number
+}>`
     display: flex;
     flex: 1;
     transition: box-shadow 200ms ease-out, transform 200ms ease-out;
@@ -36,7 +56,9 @@ const VideoCardGivenChildrenContainer = styled.div`
     max-height: 170px;
 `
 
-const VideoInformations = styled.div`
+const VideoInformations = styled.div<{
+    transparent: boolean
+}>`
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -87,7 +109,9 @@ const ChannelLogo = styled.div`
     left: 20px;
 `
 
-const CardItemContentContainer = styled.div`
+const CardItemContentContainer = styled.div<{
+    transparent: boolean
+}>`
     padding: 12px 12px 12px 32px;
     display: flex;
     position: relative;
@@ -99,6 +123,22 @@ const CardItemContentContainer = styled.div`
     transition: background-color 200ms ease-out;
 `
 
+interface VideoCardProps {
+    video: {
+        vod: VideoOnDemand
+        thumbnail?: {
+            obj: IThumbnail
+            url: string
+        }
+    }
+    haveSubtitle?: boolean
+    children?: React.ReactNode
+    redirectTo?: string | null
+    videoInfos?: string
+    cardWidth?: number
+    cardHeight?: number
+}
+
 const VideoCard = ({
     video,
     haveSubtitle = false,
@@ -107,7 +147,7 @@ const VideoCard = ({
     videoInfos = 'hover',
     cardWidth = 360,
     cardHeight = 200,
-}) => {
+}: VideoCardProps) => {
     const [videoStatus, setVideoStatus] = useState<VideoStatus>({
         playing: false,
         played: 0,
@@ -122,10 +162,10 @@ const VideoCard = ({
             ...updatedData,
         })
     const handleMouseLeave = () => {
-        updateVideoStatus({ playing: false })
+        updateVideoStatus({ ...videoStatus, playing: false })
     }
     const handleMouseEnter = () => {
-        updateVideoStatus({ playing: true })
+        updateVideoStatus({ ...videoStatus, playing: true })
     }
 
     return children ? (

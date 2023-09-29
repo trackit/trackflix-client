@@ -1,14 +1,40 @@
 export interface Thumbnail {
-    src: string
+    id: string
+    ext: string
+    src?: string
+    createdAt?: string
+    updatedAt?: string
 }
 
-export interface VideoOnDemand {
+export enum Source {
+    SELF = 'SELF',
+    YOUTUBE = 'YOUTUBE',
+    LIVESTREAM_SELF = 'LIVESTREAM_SELF',
+}
+
+export interface Media {
     id: string
     title: string
     description: string
     highlighted: boolean
+    // sections?: (MediasSections | null)[]
+    source?: Source | keyof typeof Source
     thumbnail?: Thumbnail
-    createdAt: string
-    updatedAt: string
-    src: string
+    author: string
+    viewCount?: number
+    createdAt?: string
+    updatedAt?: string
+}
+
+export interface VideoOnDemand {
+    id: string
+    media?: Media
+    src?: string
+    createdAt?: string
+    updatedAt?: string
+}
+
+export interface FetchVideoFilesResponse {
+    data: VideoOnDemand[]
+    nextToken: string | null
 }
