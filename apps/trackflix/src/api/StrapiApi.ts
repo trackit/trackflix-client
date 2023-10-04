@@ -32,6 +32,7 @@ export class StrapiApi implements IApi {
                 highlighted: video.attributes.highlighted,
                 source: 'YOUTUBE',
                 author: 'Author',
+                sections: video.attributes.sections,
             },
         } as VideoOnDemand
     }
@@ -99,5 +100,17 @@ export class StrapiApi implements IApi {
             createdAt,
             updatedAt,
         }
+    }
+
+    async fetchVodAsset(id: string): Promise<VideoOnDemand | null> {
+        const response = await fetch(`${this.baseUrl}/api/vods/${id}`, {
+            headers: {
+                Authorization: `Bearer ${this.token}`,
+            },
+        }).then((res) => res.json())
+
+        const video = response.data
+        if (!video) return null
+        return this.strapiMediaToVideoOnDemand(video)
     }
 }

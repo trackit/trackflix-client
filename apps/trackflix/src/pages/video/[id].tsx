@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { PageProps } from 'gatsby'
 import moment from 'moment'
-import { fetchVodAsset } from '../../shared/api/vod-fetch'
 import { fetchMediasSectionsFiltered } from '../../shared/api'
 import Layout from '../../shared/components/Layout'
 import VideoPlayerComponent from '../../shared/components/VideoPlayer'
-import { VideoOnDemand, MediasSections } from '../../models'
+import { VideoOnDemand } from '../../api/api.interface'
+import { MediasSections } from '../../models'
 import TrackitLogo from '../../assets/logo/trackit-colored.svg'
 import { useWindowDimensions } from '../../shared/hooks'
 import { screenSizes } from '../../shared/constants'
-import { incrementVideoCount } from '../../shared/api/mutate'
+import { incrementVideoCount, setMedia } from '../../shared/api/mutate'
+import { CMSContext } from '../../context/CMSContext'
 
 type VideoPlayerProps = {
     video: VideoOnDemand | undefined
@@ -153,9 +154,11 @@ const VideoPage = (props: PageProps) => {
     const id = props.params.id
     const [asset, setAsset] = useState<VideoOnDemand | null>(null)
     const [loaded, setLoaded] = useState<boolean>(false)
-    const [mediaSections, setMediaSections] = useState<Array<MediasSections>>(
-        []
-    )
+    // const [mediaSections, setMediaSections] = useState<Array<MediasSections>>(
+    //     []
+    // )
+    const [mediaSections, setMediaSections] = useState<string[]>([])
+    const { api } = useContext(CMSContext)
 
     useEffect(() => {
         const videoNode = document.querySelector('video')
@@ -164,7 +167,7 @@ const VideoPage = (props: PageProps) => {
         videoNode?.addEventListener(
             'play',
             () => {
-                incrementVideoCount(asset?.media)
+                // incrementVideoCount(asset?.media)
             },
             { once: true }
         )
@@ -173,11 +176,12 @@ const VideoPage = (props: PageProps) => {
     useEffect(() => {
         ;(async () => {
             try {
-                const { data } = await fetchVodAsset(id)
-                if (data?.getVideoOnDemand === null) {
+                const data = await api.fetchVodAsset(id)
+                setMediaSections(data?.media?.sections || [])
+                if (data === null) {
                     console.error('object doesnt exist')
                 } else {
-                    setAsset(data?.getVideoOnDemand as VideoOnDemand)
+                    setAsset(data as VideoOnDemand)
                 }
                 setLoaded(true)
             } catch (error) {
@@ -185,24 +189,24 @@ const VideoPage = (props: PageProps) => {
                 setLoaded(false)
             }
         })()
-    }, [fetchVodAsset])
+    }, [api.fetchVodAsset])
 
-    useEffect(() => {
-        ;(async () => {
-            try {
-                const { data } = await fetchMediasSectionsFiltered({
-                    mediaID: {
-                        eq: id,
-                    },
-                })
-                const items = data?.listMediasSections
-                    ?.items as Array<MediasSections>
-                setMediaSections(items)
-            } catch (error) {
-                console.error('video/[id].tsx(fetchMediaSections)', error)
-            }
-        })()
-    }, [])
+    // useEffect(() => {
+    //     ;(async () => {
+    //         try {
+    //             const { data } = await fetchMediasSectionsFiltered({
+    //                 mediaID: {
+    //                     eq: id,
+    //                 },
+    //             })
+    //             const items = data?.listMediasSections
+    //                 ?.items as Array<MediasSections>
+    //             setMediaSections(items)
+    //         } catch (error) {
+    //             console.error('video/[id].tsx(fetchMediaSections)', error)
+    //         }
+    //     })()
+    // }, [])
 
     return (
         <Layout>
@@ -211,7 +215,7 @@ const VideoPage = (props: PageProps) => {
                     <p>{loaded && 'Video Not Found'}</p>
                 ) : (
                     <Card>
-                        {asset.src === null ? (
+                        {asset.src !== null ? (
                             <VideoPlayer video={asset} />
                         ) : (
                             <IframeVideoPlayer asset={asset} />
@@ -221,8 +225,8 @@ const VideoPage = (props: PageProps) => {
                                 <div>
                                     {mediaSections?.map((ms) => {
                                         return (
-                                            <SectionName key={ms.id}>
-                                                {ms.section.label}
+                                            <SectionName key={ms}>
+                                                {ms}
                                             </SectionName>
                                         )
                                     })}

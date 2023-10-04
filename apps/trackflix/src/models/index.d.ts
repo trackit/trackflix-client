@@ -4,8 +4,6 @@ export enum Source {
   LIVESTREAM_SELF = "LIVESTREAM_SELF"
 }
 
-
-
 type MediaMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
