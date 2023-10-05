@@ -38,3 +38,8 @@ export interface FetchVideoFilesResponse {
     data: VideoOnDemand[]
     nextToken: string | null
 }
+
+export interface ApiRecord {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any
+}

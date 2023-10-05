@@ -2,6 +2,7 @@ import {
     VideoOnDemand,
     FetchVideoFilesResponse,
     Thumbnail,
+    ApiRecord,
 } from './api.interface'
 
 export interface IApi {

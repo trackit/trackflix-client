@@ -2,6 +2,7 @@ import {
     VideoOnDemand,
     FetchVideoFilesResponse,
     Thumbnail,
+    ApiRecord,
 } from './api.interface'
 import { IApi } from './IApi'
 import { StrapiMedia } from './strapi.interface'
