@@ -11,5 +11,6 @@ export interface StrapiMedia {
         media_url: string
         highlighted: boolean
         sections?: string[]
+        views: string
     }
 }

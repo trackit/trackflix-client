@@ -21,7 +21,7 @@ export interface Media {
     source?: Source | keyof typeof Source
     thumbnail?: Thumbnail
     author: string
-    viewCount?: number
+    viewCount: number
     createdAt?: string
     updatedAt?: string
 }
@@ -37,4 +37,9 @@ export interface VideoOnDemand {
 export interface FetchVideoFilesResponse {
     data: VideoOnDemand[]
     nextToken: string | null
+}
+
+export interface ApiRecord {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any
 }

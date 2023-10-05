@@ -2,15 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { PageProps } from 'gatsby'
 import moment from 'moment'
-import { fetchMediasSectionsFiltered } from '../../shared/api'
 import Layout from '../../shared/components/Layout'
 import VideoPlayerComponent from '../../shared/components/VideoPlayer'
 import { VideoOnDemand } from '../../api/api.interface'
-import { MediasSections } from '../../models'
 import TrackitLogo from '../../assets/logo/trackit-colored.svg'
 import { useWindowDimensions } from '../../shared/hooks'
 import { screenSizes } from '../../shared/constants'
-import { incrementVideoCount, setMedia } from '../../shared/api/mutate'
 import { CMSContext } from '../../context/CMSContext'
 
 type VideoPlayerProps = {
@@ -154,9 +151,6 @@ const VideoPage = (props: PageProps) => {
     const id = props.params.id
     const [asset, setAsset] = useState<VideoOnDemand | null>(null)
     const [loaded, setLoaded] = useState<boolean>(false)
-    // const [mediaSections, setMediaSections] = useState<Array<MediasSections>>(
-    //     []
-    // )
     const [mediaSections, setMediaSections] = useState<string[]>([])
     const { api } = useContext(CMSContext)
 
@@ -167,7 +161,11 @@ const VideoPage = (props: PageProps) => {
         videoNode?.addEventListener(
             'play',
             () => {
-                // incrementVideoCount(asset?.media)
+                if (asset?.media?.id && asset?.media?.viewCount) {
+                    api.updateAsset(asset?.media?.id, {
+                        views: asset?.media?.viewCount + 1,
+                    })
+                }
             },
             { once: true }
         )
@@ -190,23 +188,6 @@ const VideoPage = (props: PageProps) => {
             }
         })()
     }, [api.fetchVodAsset])
-
-    // useEffect(() => {
-    //     ;(async () => {
-    //         try {
-    //             const { data } = await fetchMediasSectionsFiltered({
-    //                 mediaID: {
-    //                     eq: id,
-    //                 },
-    //             })
-    //             const items = data?.listMediasSections
-    //                 ?.items as Array<MediasSections>
-    //             setMediaSections(items)
-    //         } catch (error) {
-    //             console.error('video/[id].tsx(fetchMediaSections)', error)
-    //         }
-    //     })()
-    // }, [])
 
     return (
         <Layout>
