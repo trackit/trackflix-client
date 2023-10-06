@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { PageProps } from 'gatsby'
 import Layout from '../../shared/components/Layout'
 import Loader from '../../shared/components/Loader'
-import { fetchSection, fetchVodFiles, fetchThumbnail } from '../../shared/api'
-import { VideoOnDemand, Section, Thumbnail } from '../../models'
 import moment from 'moment'
 import TrackitLogo from '../../assets/logo/trackit-colored.svg'
 import LinesEllipsis from 'react-lines-ellipsis'
@@ -12,9 +10,11 @@ import SectionVideosSorted, {
     KEY_SORT_BY_MOST_RECENT,
     KEY_SORT_BY_MOST_VIEWED,
 } from '../../shared/components/Section/SectionVideosSorted'
-import VideoCard from '../../shared/components/Card/VideoCard'
+import VideoCard, { VideoElement } from '../../shared/components/Card/VideoCard'
 import { useWindowDimensions } from '../../shared/hooks'
 import { screenSizes } from '../../shared/constants'
+import { CMSContext } from '../../context/CMSContext'
+import { VideoOnDemand, Thumbnail } from '../../api/api.interface'
 
 const Container = styled.div`
     display: flex;
@@ -137,7 +137,7 @@ const ChannelLogo = styled.div`
 
 const SectionPage = (props: PageProps) => {
     const id = props.params.id
-    const [section, setSection] = useState<Section | null>(null)
+    const [section, setSection] = useState<string | null>(null)
     const [vodAssets, setVodAssets] = useState<Array<VideoOnDemand>>([])
     const [cardProperties, setCardProperties] = useState({
         infos: 'show',
@@ -151,30 +151,30 @@ const SectionPage = (props: PageProps) => {
         }>
     >([])
     const { width } = useWindowDimensions()
+    const { api } = useContext(CMSContext)
 
     useEffect(() => {
         ;(async () => {
-            const { data } = await fetchSection(id)
-            setSection(data?.getSection as Section)
+            setSection(id) // FETCH FROM API
         })()
     }, [id])
 
     useEffect(() => {
         ;(async () => {
             try {
-                const { data } = await fetchVodFiles(null)
-                const fetchedVodAssets = data?.listVideoOnDemands
-                    ?.items as Array<VideoOnDemand>
+                const data = await api.fetchVodFiles(null, true)
+                const fetchedVodAssets = data?.data
                 const assets = fetchedVodAssets.filter((asset) => {
                     let returnValue = false
                     // eslint-disable-next-line
-                    asset.media?.sections?.items.forEach((item) => {
-                        if (item?.section.id === section.id) {
+                    asset.media?.sections?.forEach((item) => {
+                        if (item === section) {
                             returnValue = true
                         }
                     })
                     return returnValue
                 })
+                console.log('==>', assets[0])
                 setVodAssets(assets)
                 const thumbnailArr: Array<{
                     obj: Thumbnail | undefined
@@ -182,16 +182,17 @@ const SectionPage = (props: PageProps) => {
                 }> = []
                 await Promise.all(
                     assets.map(async (asset) => {
-                        if (asset.media?.thumbnail?.src != null) {
+                        if (asset.media?.thumbnail?.src) {
                             thumbnailArr.push({
                                 obj: asset.media.thumbnail,
                                 url: asset.media.thumbnail.src,
                             })
                         } else {
-                            const data = await fetchThumbnail(asset.media)
+                            const data = await api.fetchThumbnail(asset.id)
+                            console.log(data)
                             thumbnailArr.push({
-                                obj: asset.media?.thumbnail,
-                                url: data as string,
+                                obj: data,
+                                url: data.src || '',
                             })
                         }
                     })
@@ -226,9 +227,9 @@ const SectionPage = (props: PageProps) => {
             {section ? (
                 <Container>
                     <Header>
-                        <Title>{section.label}</Title>
+                        <Title>{section}</Title>
                         <Separator />
-                        <Description>{section.description}</Description>
+                        {/* <Description>{section}</Description> */}
                     </Header>
                     <SplitScreenContainer>
                         <SplitScreen>
@@ -246,7 +247,7 @@ const SectionPage = (props: PageProps) => {
                                     return (
                                         <VideoCardContainer key={vod.id}>
                                             <VideoCard
-                                                video={video}
+                                                video={video as VideoElement}
                                                 videoInfos={
                                                     cardProperties.infos
                                                 }
