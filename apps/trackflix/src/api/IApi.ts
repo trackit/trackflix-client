@@ -2,7 +2,6 @@ import {
     VideoOnDemand,
     FetchVideoFilesResponse,
     Thumbnail,
-    ApiRecord,
 } from './api.interface'
 
 export interface IApi {
@@ -10,5 +9,6 @@ export interface IApi {
     fetchVodFiles(nextToken: string | null): Promise<FetchVideoFilesResponse>
     fetchVodAsset(id: string): Promise<VideoOnDemand | null>
     fetchThumbnail(id: string): Promise<Thumbnail>
-    updateAsset(id: string, record: any): Promise<boolean>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    updateAsset(id: string, record: Record<string, any>): Promise<void>
 }

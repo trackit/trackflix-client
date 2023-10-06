@@ -2,7 +2,6 @@ import {
     VideoOnDemand,
     FetchVideoFilesResponse,
     Thumbnail,
-    ApiRecord,
 } from './api.interface'
 import { IApi } from './IApi'
 import { StrapiMedia } from './strapi.interface'
@@ -116,9 +115,12 @@ export class StrapiApi implements IApi {
         return this.strapiMediaToVideoOnDemand(video)
     }
 
-    async updateAsset(id: string, record: any): Promise<boolean> {
-        console.log(record)
-        const response = await fetch(`${this.baseUrl}/api/vods/${id}`, {
+    async updateAsset(
+        id: string,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        record: Record<string, any>
+    ): Promise<void> {
+        await fetch(`${this.baseUrl}/api/vods/${id}`, {
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${this.token}`,
@@ -127,8 +129,6 @@ export class StrapiApi implements IApi {
             body: JSON.stringify({
                 data: record,
             }),
-        }).then((res) => res.json())
-
-        return response.data ? true : false
+        })
     }
 }
