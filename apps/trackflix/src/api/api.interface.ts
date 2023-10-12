@@ -17,11 +17,11 @@ export interface Media {
     title: string
     description: string
     highlighted: boolean
-    // sections?: (MediasSections | null)[]
+    sections?: string[]
     source?: Source | keyof typeof Source
     thumbnail?: Thumbnail
     author: string
-    viewCount?: number
+    viewCount: number
     createdAt?: string
     updatedAt?: string
 }

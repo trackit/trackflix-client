@@ -146,11 +146,7 @@ const Footer = () => (
                     />
                     <ContentLink
                         href="https://aws.amazon.com/marketplace/search/?CREATOR=b9e05e1d-4e48-4814-b869-b911eb51e288&filters=CREATOR"
-                        text="AWS Market place"
-                    />
-                    <ContentLink
-                        href="https://trackit.io/trackit-whitepapers/cognito-amplify/"
-                        text="Amplify - learn more"
+                        text="AWS Marketplace"
                     />
                 </UsefulLinks>
             </Content>

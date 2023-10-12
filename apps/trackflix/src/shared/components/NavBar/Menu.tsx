@@ -7,8 +7,6 @@ import Dropdown from '../Dropdown'
 import { useWindowDimensions } from '../../hooks'
 import { screenSizes } from '../../constants'
 
-import UserMenu from './UserMenu'
-
 import MenuColored from '../../../assets/logo/menu-colored.svg'
 import MenuWhite from '../../../assets/logo/menu-white.svg'
 
@@ -70,11 +68,6 @@ const Menu = ({ navbarTheme, navBarHeight, minHeight }) => {
             theme={navbarTheme}
             to="/search"
             key="search"
-            dropdownmode={dropdownmode}
-        />,
-        <UserMenu
-            key="user"
-            navbarTheme={navbarTheme}
             dropdownmode={dropdownmode}
         />,
     ]

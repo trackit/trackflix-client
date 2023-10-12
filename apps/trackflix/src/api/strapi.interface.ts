@@ -10,5 +10,7 @@ export interface StrapiMedia {
         type?: string
         media_url: string
         highlighted: boolean
+        sections?: string[]
+        views: string
     }
 }
