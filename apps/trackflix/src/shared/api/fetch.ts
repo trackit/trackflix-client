@@ -53,20 +53,16 @@ async function fetchMedias(nextToken: string | undefined = undefined) {
     //         nextToken: nextToken,
     //     },
     // })) as GraphQLResult<APIt.ListMediaQuery>
-
     // if (res.errors?.length && res.errors.length > 0) {
     //     return res
     // }
-
     // if (res.data?.listMedia?.nextToken) {
     //     const nextItems = (await fetchMedias(
     //         res.data.listMedia.nextToken
     //     )) as GraphQLResult<APIt.ListMediaQuery>
-
     //     if (nextItems.errors?.length && nextItems.errors.length > 0) {
     //         return nextItems
     //     }
-
     //     return {
     //         data: {
     //             listMedia: {
