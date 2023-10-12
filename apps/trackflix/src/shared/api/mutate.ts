@@ -245,9 +245,7 @@ async function createNewSecuredLinkLog(
 
 const incrementVideoCount = async (media: Media | undefined) => {
     // if (!media) return
-
     // const views = media.viewCount ?? 0
-
     // return API.graphql({
     //     query: updateMedia,
     //     variables: {

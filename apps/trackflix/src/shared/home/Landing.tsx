@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { fetchHighlightedVideos } from '../api'
 import ReactPlayer from 'react-player'
 import { navigate } from 'gatsby'
 import intro from '../../videos/introduction-video.mp4'
@@ -104,10 +103,11 @@ const Landing = () => {
     useEffect(() => {
         const fetchHighlited = async () => {
             const highlightedVideos = await api.fetchHighlightedVideos()
+            console.log(highlightedVideos)
             if (highlightedVideos && highlightedVideos.length > 0) {
                 const media = highlightedVideos[0]
                 setVideo(media)
-                setSource(media.src)
+                setSource(media.src as string)
             } else {
                 setSource(intro)
             }
@@ -139,11 +139,13 @@ const Landing = () => {
                     {video && (
                         <VideoInfosContainer>
                             {width > screenSizes.xs && (
-                                <VideoTitle>{video && video.title}</VideoTitle>
+                                <VideoTitle>
+                                    {video && video.media?.title}
+                                </VideoTitle>
                             )}
                             {width > screenSizes.s && (
                                 <VideoDescription>
-                                    {video && video.description}
+                                    {video && video.media?.description}
                                 </VideoDescription>
                             )}
                             <PlayButton

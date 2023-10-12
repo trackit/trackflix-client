@@ -1,4 +1,8 @@
-import { VideoOnDemand } from './api.interface'
+import {
+    VideoOnDemand,
+    FetchVideoFilesResponse,
+    Thumbnail,
+} from './api.interface'
 import { IApi } from './IApi'
 import { StrapiMedia } from './strapi.interface'
 
@@ -15,6 +19,23 @@ export class StrapiApi implements IApi {
         this.token = token
     }
 
+    private strapiMediaToVideoOnDemand(video: StrapiMedia): VideoOnDemand {
+        return {
+            id: video.id,
+            src: video.attributes.media_url,
+            createdAt: video.attributes.createdAt,
+            updatedAt: video.attributes.updatedAt,
+            media: {
+                id: video.id,
+                title: video.attributes.Name,
+                description: video.attributes.description,
+                highlighted: video.attributes.highlighted,
+                source: 'YOUTUBE',
+                author: 'Author',
+            },
+        } as VideoOnDemand
+    }
+
     async fetchHighlightedVideos(): Promise<VideoOnDemand[]> {
         const response = await fetch(
             `${this.baseUrl}/api/vods?filters[highlighted][$eq]=true`,
@@ -28,14 +49,55 @@ export class StrapiApi implements IApi {
         const videos: StrapiMedia[] = await response
             .json()
             .then((res) => res.data)
-        return videos.map((video: StrapiMedia) => ({
-            id: video.id,
-            title: video.attributes.Name,
-            description: video.attributes.description,
-            highlighted: video.attributes.highlighted,
-            createdAt: video.attributes.createdAt,
-            updatedAt: video.attributes.updatedAt,
-            src: video.attributes.media_url,
-        }))
+        return videos.map((video: StrapiMedia) =>
+            this.strapiMediaToVideoOnDemand(video)
+        )
+    }
+
+    async fetchVodFiles(
+        nextToken: string | null
+    ): Promise<FetchVideoFilesResponse> {
+        const response = await fetch(
+            `${this.baseUrl}/api/vods/?pagination[page]=${
+                nextToken ? parseInt(nextToken) : 1
+            }`,
+            {
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                },
+            }
+        ).then((res) => res.json())
+
+        const videos: VideoOnDemand[] = response.data.map(
+            (video: StrapiMedia) => this.strapiMediaToVideoOnDemand(video)
+        )
+        const { pageCount, page } = response.meta.pagination
+
+        return {
+            data: videos,
+            nextToken: page < pageCount ? (page + 1).toString() : null,
+        }
+    }
+
+    async fetchThumbnail(id: string): Promise<Thumbnail> {
+        const response = await fetch(
+            `${this.baseUrl}/api/vods/${id}?populate=Thumbnails`,
+            {
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                },
+            }
+        ).then((res) => res.json())
+        const thumbnailObj = response.data.attributes?.Thumbnails?.data[0]
+        const { createdAt, updatedAt } = thumbnailObj.attributes
+        const { thumbnail } = thumbnailObj?.attributes?.formats
+
+        return {
+            id: thumbnailObj.id,
+            ext: thumbnail.ext,
+            src: `${this.baseUrl}${thumbnail.url}`,
+            createdAt,
+            updatedAt,
+        }
     }
 }
