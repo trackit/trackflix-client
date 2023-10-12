@@ -28,7 +28,7 @@ export interface Media {
 
 export interface VideoOnDemand {
     id: string
-    media?: Media
+    media: Media
     src?: string
     createdAt?: string
     updatedAt?: string

@@ -123,14 +123,16 @@ const CardItemContentContainer = styled.div<{
     transition: background-color 200ms ease-out;
 `
 
-interface VideoCardProps {
-    video: {
-        vod: VideoOnDemand
-        thumbnail?: {
-            obj: IThumbnail
-            url: string
-        }
+export interface VideoElement {
+    vod: VideoOnDemand
+    thumbnail: {
+        obj: IThumbnail
+        url: string
     }
+}
+
+interface VideoCardProps {
+    video: VideoElement
     haveSubtitle?: boolean
     children?: React.ReactNode
     redirectTo?: string | null

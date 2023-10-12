@@ -38,6 +38,21 @@ export class StrapiApi implements IApi {
         } as VideoOnDemand
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private strapiMediaToThumbnail(response: any): Thumbnail {
+        const thumbnailObj = response.attributes?.Thumbnails?.data[0]
+        const { createdAt, updatedAt } = thumbnailObj.attributes
+        const { thumbnail } = thumbnailObj?.attributes?.formats
+
+        return {
+            id: thumbnailObj.id,
+            ext: thumbnail.ext,
+            src: `${this.baseUrl}${thumbnail.url}`,
+            createdAt,
+            updatedAt,
+        }
+    }
+
     async fetchHighlightedVideos(): Promise<VideoOnDemand[]> {
         const response = await fetch(
             `${this.baseUrl}/api/vods?filters[highlighted][$eq]=true`,
@@ -57,12 +72,13 @@ export class StrapiApi implements IApi {
     }
 
     async fetchVodFiles(
-        nextToken: string | null
+        nextToken: string | null,
+        fechThumbnails = false
     ): Promise<FetchVideoFilesResponse> {
         const response = await fetch(
             `${this.baseUrl}/api/vods/?pagination[page]=${
                 nextToken ? parseInt(nextToken) : 1
-            }`,
+            }&populate=Thumbnails`,
             {
                 headers: {
                     Authorization: `Bearer ${this.token}`,
@@ -70,8 +86,14 @@ export class StrapiApi implements IApi {
             }
         ).then((res) => res.json())
 
-        const videos: VideoOnDemand[] = response.data.map(
-            (video: StrapiMedia) => this.strapiMediaToVideoOnDemand(video)
+        const videos: VideoOnDemand[] = await Promise.all(
+            response.data.map((video: StrapiMedia) => {
+                const result = this.strapiMediaToVideoOnDemand(video)
+                if (fechThumbnails)
+                    result.media.thumbnail = this.strapiMediaToThumbnail(video)
+
+                return result
+            })
         )
         const { pageCount, page } = response.meta.pagination
 
@@ -90,17 +112,8 @@ export class StrapiApi implements IApi {
                 },
             }
         ).then((res) => res.json())
-        const thumbnailObj = response.data.attributes?.Thumbnails?.data[0]
-        const { createdAt, updatedAt } = thumbnailObj.attributes
-        const { thumbnail } = thumbnailObj?.attributes?.formats
 
-        return {
-            id: thumbnailObj.id,
-            ext: thumbnail.ext,
-            src: `${this.baseUrl}${thumbnail.url}`,
-            createdAt,
-            updatedAt,
-        }
+        return this.strapiMediaToThumbnail(response.data)
     }
 
     async fetchVodAsset(id: string): Promise<VideoOnDemand | null> {
