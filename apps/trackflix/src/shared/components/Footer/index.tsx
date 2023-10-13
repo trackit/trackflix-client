@@ -160,7 +160,7 @@ const Footer = () => (
                 Privacy
             </InfoLink>
             <NormalText>
-                © 2021 Trackit, Inc. or its affiliates. All rights reserved.
+                © 2023 Trackit, Inc. or its affiliates. All rights reserved.
             </NormalText>
             <NormalText>
                 Created by{' '}
