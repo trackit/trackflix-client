@@ -1,25 +1,52 @@
-# Migration
+# Trackflix
 
-## How to migrate the project to another AWS account
+Trackflix is a web application built with Gatsby that serves as a tool to organize and manage your video library. With features like a Video Player, Video Preview, and a stunning Background Showcase, Trackflix provides a seamless way to enjoy and organize your favorite videos.
+It uses the [Trackflix CMS](https://github.com/trackit/trackflix-cms) as a backend to store and manage video content.
 
-Before all make sure you are using the version of node specified in the `.nvmrc` file
+## Table of Contents
 
-```sh
-npm install -g @aws-amplify/cli
-amplify configure
-```
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
 
-The configure step will guide you through steps for creating a new IAM user. Select all default options.
-If you already have the CLI configured, you do not need to run the configure command again.
+## Features
 
-```sh
-amplify init --app https://github.com/trackit/amplify-video-community
-```
+- **Video Player:** Enjoy your videos with a built-in video player.
+- **Video Preview:** Quickly preview video content before watching.
+- **Background Showcase:** A visually appealing background to enhance your viewing experience.
 
-The init command clones the GitHub repo, initializes the CLI, creates a ‘sampledev’ environment in CLI, detects and adds categories, provisions the backend, pushes the changes to the cloud, and starts the app.
+## Getting Started
 
-If you already have an AWS profile set up on your local machine, choose “Yes” when prompted by the CLI and select the profile you would like to use.
+These instructions will help you get a copy of Trackflix up and running on your local machine.
 
-The whole article can be found [here](https://aws.amazon.com/blogs/mobile/amplify-cli-adds-scaffolding-support-for-amplify-apps-and-authoring-plugins/)
+### Prerequisites
 
---
+- [Git](https://git-scm.com/)
+- Node.js: [v16.20.x recommended](https://nodejs.org/en/)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/trackit/trackflix-client.git
+    ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```bash
+    npm run develop
+    ```
+
+### Environment Variables
+
+| Variable Name | Description | Default Value |
+| ------------- | ----------- | ------------- |
+| `REACT_APP_CMS_BASE_URL` | The URL of the Trackflix API | `https://trackflix-cms.trackit.io/` |
+| `REACT_APP_CMS_TOKEN` | The API token used to authenticate with the Trackflix API | None |
