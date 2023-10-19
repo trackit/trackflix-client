@@ -113,6 +113,11 @@ export class StrapiApi implements IApi {
             }
         ).then((res) => res.json())
 
+        console.log('lalalaa')
+        console.log(
+            'Thumb fetch function: ' +
+                this.strapiMediaToThumbnail(response.data)
+        )
         return this.strapiMediaToThumbnail(response.data)
     }
 

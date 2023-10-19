@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import CSS from 'csstype'
-import { VideoOnDemand, Thumbnail } from '../../../../models'
+import { Thumbnail, VideoOnDemand } from '../../../../api/api.interface'
 import { defaultVideoCardProperties, screenSizes } from '../../../constants'
 import {
     NextArrow,
