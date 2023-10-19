@@ -113,7 +113,7 @@ const VideoPage = () => {
                 <OverflowContainer>
                     <VideosSection
                         key={'test'}
-                        section={testSection}
+                        section={'dogs'}
                         vodAssets={vodAssets}
                         thumbnails={thumbnails}
                     />
