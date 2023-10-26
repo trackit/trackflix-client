@@ -12,8 +12,16 @@ It uses the [Trackflix CMS](https://github.com/trackit/trackflix-cms) as a backe
 ## Features
 
 - **Video Player:** Enjoy your videos with a built-in video player.
+
+![Screenshot 2023-10-26 at 7 09 53 PM](https://github.com/trackit/trackflix-client/assets/56727008/76ab4437-f57c-44cd-9539-bc9dacc433ca)
+
 - **Video Preview:** Quickly preview video content before watching.
+
+![Screenshot 2023-10-26 at 7 10 21 PM](https://github.com/trackit/trackflix-client/assets/56727008/70ba843e-795c-43b1-9d3e-61c1faa24e55)
+
 - **Background Showcase:** A visually appealing background to enhance your viewing experience.
+
+![Screenshot 2023-10-26 at 7 10 11 PM](https://github.com/trackit/trackflix-client/assets/56727008/f9112f19-5cf0-426a-9059-1b344b7b05fa)
 
 ## Getting Started
 
