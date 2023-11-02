@@ -80,8 +80,14 @@ const VideosSection = ({ section, vodAssets }: SectionProps) => {
         const fAssets: Array<VideoInfo> = []
         const assets = vodAssets.filter((asset) => {
             let returnValue = false
+<<<<<<< HEAD
             asset.media?.sections?.forEach((mediaSection) => {
                 if (mediaSection === section) {
+=======
+            // eslint-disable-next-line
+            asset.media?.sections?.forEach((item) => {
+                if (item === section.id) {
+>>>>>>> 57e25e6 (all VOD in one test section)
                     returnValue = true
                 }
             })

@@ -12,7 +12,6 @@ const Container = styled.div`
     position: relative;
     top: -200px;
     z-index: 3;
-    background-color: red;
 `
 
 const OverflowContainer = styled.div`
@@ -32,15 +31,15 @@ const VideoPage = () => {
             url: string
         }>
     >([])
-    //const [sections, setSections] = useState<Array<Section> | null>(null)
+    const [sections, setSections] = useState<Array<Section> | null>(null)
     const [loadingVodFiles, setLoadingVodFiles] = useState<boolean>(false)
-    // const [loadingSections, setLoadingSections] = useState<boolean>(false)
+    const [loadingSections, setLoadingSections] = useState<boolean>(false)
     // const [haveHighlightedContent, setHaveHighlightedContent] = useState(false)
 
     const testSection: Section = {
-        id: 'test',
-        label: 'VODs',
-        description: 'test',
+        id: 'MOVIE',
+        label: 'Test',
+        description: 'This is a test',
     }
     const { api } = useContext(CMSContext)
 
@@ -49,7 +48,6 @@ const VideoPage = () => {
             setLoadingVodFiles(true)
             try {
                 const fetchedData = await api.fetchVodFiles(null)
-                //console.log(fetchedData.data)
                 const assets = fetchedData.data
                 setVodAssets(assets)
                 const thumbnailArr: Array<{
@@ -65,20 +63,16 @@ const VideoPage = () => {
                 // }
                 await Promise.all(
                     assets.map(async (asset) => {
-                        //console.log(asset)
                         if (asset.media?.thumbnail?.src != null) {
                             thumbnailArr.push({
                                 obj: asset.media.thumbnail,
                                 url: asset.media.thumbnail.src,
                             })
                         } else {
-                            //console.log('PRE DATA:')
                             const data = await api.fetchThumbnail(asset.id)
-                            console.log('DATA:')
-                            console.log(data)
                             thumbnailArr.push({
-                                obj: asset.media?.thumbnail,
-                                url: data.src!,
+                                obj: data,
+                                url: data.src as string,
                             })
                         }
                     })
@@ -89,13 +83,47 @@ const VideoPage = () => {
                 console.error('videos.tsx(fetchVodFiles):', error)
             }
             setLoadingVodFiles(false)
-            // console.log('VOD ASSETS:')
-            // console.log(vodAssets)
-            // console.log('THUMBNAILS ASSETS:')
-            // console.log(thumbnails)
-            // console.log(loadingVodFiles)
         })()
     }, [])
+
+    // useEffect(() => {
+    //     ;(async () => {
+    //         setLoadingSections(true)
+    //         try {
+    //             const { data } = await fetchSections()
+    //             let nonce = true
+    //             const list = data?.listSections?.items as Array<Section>
+    //             if (haveHighlightedContent) {
+    //                 list.forEach((item, index, arr) => {
+    //                     if (arr.length <= 3 && nonce) {
+    //                         arr.push({
+    //                             label: 'Highlighted',
+    //                             id: `Highlighted${index}`,
+    //                             description: 'Highlighted content',
+    //                         })
+    //                         nonce = false
+    //                     }
+    //                     if (
+    //                         index % 3 === 0 &&
+    //                         index !== 0 &&
+    //                         item?.label !== 'Highlighted'
+    //                     ) {
+    //                         arr.splice(index, 0, {
+    //                             label: 'Highlighted',
+    //                             id: `Highlighted${index}`,
+    //                             description: 'Highlighted content',
+    //                         })
+    //                     }
+    //                 })
+    //             }
+    //             setSections(list)
+    //         } catch (error) {
+    //             console.error('videos.tsx(fetchSections)', error)
+    //         }
+    //         setLoadingSections(false)
+    //         console.log('LOADING SECTIONS: ' + sections)
+    //     })()
+    // }, [])
 
     useEffect(() => {
         console.log('VOD ASSETS:')

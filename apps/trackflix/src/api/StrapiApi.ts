@@ -40,16 +40,28 @@ export class StrapiApi implements IApi {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private strapiMediaToThumbnail(response: any): Thumbnail {
-        const thumbnailObj = response.attributes?.Thumbnails?.data[0]
-        const { createdAt, updatedAt } = thumbnailObj.attributes
-        const { thumbnail } = thumbnailObj?.attributes?.formats
+        if (response.attributes?.Thumbnails?.data != null) {
+            const thumbnailObj = response.attributes?.Thumbnails?.data[0]
+            const { createdAt, updatedAt } = thumbnailObj.attributes
+            const { thumbnail } = thumbnailObj?.attributes?.formats
 
-        return {
-            id: thumbnailObj.id,
-            ext: thumbnail.ext,
-            src: `${this.baseUrl}${thumbnail.url}`,
-            createdAt,
-            updatedAt,
+            const thumbnailFormated = {
+                id: `${thumbnailObj.id}`,
+                ext: thumbnail.ext,
+                src: `${this.baseUrl}${thumbnail.url}`,
+                createdAt,
+                updatedAt,
+            }
+            return thumbnailFormated
+        } else {
+            const defaultThumbnailFormated = {
+                id: '',
+                ext: '',
+                src: `${this.baseUrl}${''}`,
+                createdAt: '00-00-0000 00:00',
+                updatedAt: '00-00-0000 00:00',
+            }
+            return defaultThumbnailFormated
         }
     }
 
@@ -113,11 +125,6 @@ export class StrapiApi implements IApi {
             }
         ).then((res) => res.json())
 
-        console.log('lalalaa')
-        console.log(
-            'Thumb fetch function: ' +
-                this.strapiMediaToThumbnail(response.data)
-        )
         return this.strapiMediaToThumbnail(response.data)
     }
 
