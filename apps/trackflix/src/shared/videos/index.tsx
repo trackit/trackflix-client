@@ -25,12 +25,6 @@ const OverflowContainer = styled.div`
 
 const VideoPage = () => {
     const [vodAssets, setVodAssets] = useState<VideoOnDemand[]>([])
-    const [thumbnails, setThumbnails] = useState<
-        Array<{
-            obj: Thumbnail | undefined
-            url: string
-        }>
-    >([])
     const [sections, setSections] = useState<Array<Section> | null>(null)
     const [loadingVodFiles, setLoadingVodFiles] = useState<boolean>(false)
     const [loadingSections, setLoadingSections] = useState<boolean>(false)
@@ -47,13 +41,9 @@ const VideoPage = () => {
         ;(async () => {
             setLoadingVodFiles(true)
             try {
-                const fetchedData = await api.fetchVodFiles(null)
+                const fetchedData = await api.fetchVodFiles(null, true)
                 const assets = fetchedData.data
                 setVodAssets(assets)
-                const thumbnailArr: Array<{
-                    obj: Thumbnail | undefined
-                    url: string
-                }> = []
                 // if (
                 //     assets.findIndex(
                 //         (elem) => elem.media?.highlighted === true
@@ -128,10 +118,8 @@ const VideoPage = () => {
     useEffect(() => {
         console.log('VOD ASSETS:')
         console.log(vodAssets)
-        console.log('THUMBNAILS ASSETS:')
-        console.log(thumbnails)
         console.log(loadingVodFiles)
-    }, [vodAssets, thumbnails, loadingVodFiles])
+    }, [vodAssets, loadingVodFiles])
 
     return (
         <Container>
@@ -143,7 +131,6 @@ const VideoPage = () => {
                         key={'test'}
                         section={'dogs'}
                         vodAssets={vodAssets}
-                        thumbnails={thumbnails}
                     />
                 </OverflowContainer>
             )}
