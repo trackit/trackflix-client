@@ -151,7 +151,7 @@ const VideoPage = (props: PageProps) => {
     const id = props.params.id
     const [asset, setAsset] = useState<VideoOnDemand | null>(null)
     const [loaded, setLoaded] = useState<boolean>(false)
-    const [mediaSections, setMediaSections] = useState<string[]>([])
+    const [mediaSection, setMediaSection] = useState<string>('')
     const { api } = useContext(CMSContext)
 
     useEffect(() => {
@@ -163,7 +163,7 @@ const VideoPage = (props: PageProps) => {
             () => {
                 if (asset?.media?.id && asset?.media?.viewCount) {
                     api.updateAsset(asset?.media?.id, {
-                        views: asset?.media?.viewCount + 1,
+                        views: asset?.media?.viewCount + 1 || 1,
                     })
                 }
             },
@@ -175,7 +175,7 @@ const VideoPage = (props: PageProps) => {
         ;(async () => {
             try {
                 const data = await api.fetchVodAsset(id)
-                setMediaSections(data?.media?.sections || [])
+                setMediaSection(data?.media?.genre || '')
                 if (data === null) {
                     console.error('object doesnt exist')
                 } else {
@@ -204,13 +204,7 @@ const VideoPage = (props: PageProps) => {
                         <VideoData>
                             <SectionAndDate>
                                 <div>
-                                    {mediaSections?.map((ms) => {
-                                        return (
-                                            <SectionName key={ms}>
-                                                {ms}
-                                            </SectionName>
-                                        )
-                                    })}
+                                    <SectionName>{mediaSection}</SectionName>
                                 </div>
                                 <FormatedDate>
                                     {moment(asset.media?.createdAt).format(

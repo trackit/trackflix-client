@@ -167,11 +167,9 @@ const SectionPage = (props: PageProps) => {
                 const assets = fetchedVodAssets.filter((asset) => {
                     let returnValue = false
                     // eslint-disable-next-line
-                    asset.media?.sections?.forEach((item) => {
-                        if (item === section) {
-                            returnValue = true
-                        }
-                    })
+                    if (asset.media.genre === section) {
+                        returnValue = true
+                    }
                     return returnValue
                 })
                 console.log('==>', assets[0])
