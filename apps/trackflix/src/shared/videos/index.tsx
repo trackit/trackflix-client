@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import VideosSection from '../components/Section/VideosSection'
 import Loader from '../../shared/components/Loader'
-import { fetchSections, fetchVodFiles, fetchThumbnail } from '../../shared/api'
+// import { fetchSections, fetchVodFiles, fetchThumbnail } from '../../shared/api'
 import { Thumbnail, VideoOnDemand, Section } from '../../models'
 
 const Container = styled.div`
@@ -39,6 +39,7 @@ const VideoPage = () => {
         ;(async () => {
             setLoadingVodFiles(true)
             try {
+                /*
                 const { data } = await fetchVodFiles(null)
                 const assets = data?.listVideoOnDemands
                     ?.items as Array<VideoOnDemand>
@@ -71,6 +72,7 @@ const VideoPage = () => {
                     })
                 )
                 setThumbnails(thumbnailArr)
+                */
             } catch (error) {
                 console.error('videos.tsx(fetchVodFiles):', error)
             }
@@ -82,6 +84,7 @@ const VideoPage = () => {
         ;(async () => {
             setLoadingSections(true)
             try {
+                /*
                 const { data } = await fetchSections()
                 let nonce = true
                 const list = data?.listSections?.items as Array<Section>
@@ -109,6 +112,7 @@ const VideoPage = () => {
                     })
                 }
                 setSections(list)
+                */
             } catch (error) {
                 console.error('videos.tsx(fetchSections)', error)
             }

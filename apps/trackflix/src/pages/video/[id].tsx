@@ -161,7 +161,7 @@ const VideoPage = (props: PageProps) => {
         videoNode?.addEventListener(
             'play',
             () => {
-                if (asset?.media?.id && asset?.media?.viewCount) {
+                if (asset?.media?.id && asset?.media?.viewCount !== undefined) {
                     api.updateAsset(asset?.media?.id, {
                         views: asset?.media?.viewCount + 1 || 1,
                     })

@@ -123,8 +123,6 @@ export class StrapiApi implements IApi {
             },
         }).then((res) => res.json())
 
-        console.log(response)
-
         const video = response.data
         if (!video) return null
         return this.strapiMediaToVideoOnDemand(video)
