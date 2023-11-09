@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import CSS from 'csstype'
-import { VideoOnDemand, Section, Thumbnail } from '../../../models'
+import { Thumbnail, VideoOnDemand } from '../../../api/api.interface'
 import VideoCardSlider from '../Sliders/VideoCardSlider'
 import { navigate } from 'gatsby'
 import RightArrowLogo from '../../../assets/logo/right-arrow.svg'
 
 type SectionProps = {
-    section: Section
+    section: string
     vodAssets: Array<VideoOnDemand>
-    thumbnails: Array<{
-        obj: Thumbnail | undefined
-        url: string
-    }>
 }
 
 type VideoInfo = {
@@ -77,46 +73,51 @@ const StyledArrow = styled(RightArrowLogo)`
     z-index: 2;
 `
 
-const VideosSection = ({ section, vodAssets, thumbnails }: SectionProps) => {
+const VideosSection = ({ section, vodAssets }: SectionProps) => {
     const [videoInfos, setVideoInfos] = useState<Array<VideoInfo>>([])
 
     useEffect(() => {
         const fAssets: Array<VideoInfo> = []
         const assets = vodAssets.filter((asset) => {
             let returnValue = false
-            // eslint-disable-next-line
-            asset.media?.sections?.items.forEach((item) => {
-                if (item?.section.id === section.id) {
+            asset.media?.sections?.forEach((mediaSection) => {
+                if (mediaSection === section) {
                     returnValue = true
                 }
             })
             return returnValue
         })
         assets.forEach((a) => {
+            console.log(a)
             fAssets.push({
-                thumbnail: thumbnails.find(
-                    (thumbnail) => a.media?.thumbnail?.id === thumbnail.obj?.id
-                ),
+                thumbnail: {
+                    obj: a.media.thumbnail,
+                    url: a.media.thumbnail?.src || '',
+                },
                 vod: a,
             })
         })
         setVideoInfos(fAssets)
     }, [])
 
+    useEffect(() => {
+        console.log(videoInfos, videoInfos.length)
+    })
+
     return videoInfos && videoInfos.length > 0 ? (
         <VideosSectionContainer>
             <Header>
                 <TitleContainer
                     onClick={() => {
-                        navigate(`/section/${section.id}`)
+                        navigate(`/section/${section}`)
                     }}
                 >
-                    <Title>{section.label}</Title>
+                    <Title>{section}</Title>
                     <SeeAll>see all</SeeAll>
                     <StyledArrow />
                 </TitleContainer>
             </Header>
-            <VideoCardSlider videoInfos={videoInfos} section={section} />
+            <VideoCardSlider videoInfos={videoInfos} />
         </VideosSectionContainer>
     ) : null
 }

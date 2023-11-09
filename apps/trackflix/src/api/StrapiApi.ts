@@ -32,7 +32,7 @@ export class StrapiApi implements IApi {
                 highlighted: video.attributes.highlighted,
                 source: 'YOUTUBE',
                 author: 'Author',
-                sections: video.attributes.sections,
+                genre: video.attributes.genre,
                 viewCount: parseInt(video.attributes.views),
             },
         } as VideoOnDemand
@@ -122,6 +122,8 @@ export class StrapiApi implements IApi {
                 Authorization: `Bearer ${this.token}`,
             },
         }).then((res) => res.json())
+
+        console.log(response)
 
         const video = response.data
         if (!video) return null
