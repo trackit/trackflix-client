@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import VideosSection from '../components/Section/VideosSection'
 import Loader from '../../shared/components/Loader'
 import { CMSContext } from '../../context/CMSContext'
-import { Thumbnail, VideoOnDemand } from '../../api/api.interface'
+import { VideoOnDemand } from '../../api/api.interface'
 import { Section } from '../../models'
 
 const Container = styled.div`
@@ -30,11 +30,6 @@ const VideoPage = () => {
     const [loadingSections, setLoadingSections] = useState<boolean>(false)
     // const [haveHighlightedContent, setHaveHighlightedContent] = useState(false)
 
-    const testSection: Section = {
-        id: 'MOVIE',
-        label: 'Test',
-        description: 'This is a test',
-    }
     const { api } = useContext(CMSContext)
 
     useEffect(() => {
@@ -43,6 +38,7 @@ const VideoPage = () => {
             try {
                 const fetchedData = await api.fetchVodFiles(null, true)
                 const assets = fetchedData.data
+                console.log(assets)
                 setVodAssets(assets)
                 // if (
                 //     assets.findIndex(
@@ -76,50 +72,18 @@ const VideoPage = () => {
         })()
     }, [])
 
-    // useEffect(() => {
-    //     ;(async () => {
-    //         setLoadingSections(true)
-    //         try {
-    //             const { data } = await fetchSections()
-    //             let nonce = true
-    //             const list = data?.listSections?.items as Array<Section>
-    //             if (haveHighlightedContent) {
-    //                 list.forEach((item, index, arr) => {
-    //                     if (arr.length <= 3 && nonce) {
-    //                         arr.push({
-    //                             label: 'Highlighted',
-    //                             id: `Highlighted${index}`,
-    //                             description: 'Highlighted content',
-    //                         })
-    //                         nonce = false
-    //                     }
-    //                     if (
-    //                         index % 3 === 0 &&
-    //                         index !== 0 &&
-    //                         item?.label !== 'Highlighted'
-    //                     ) {
-    //                         arr.splice(index, 0, {
-    //                             label: 'Highlighted',
-    //                             id: `Highlighted${index}`,
-    //                             description: 'Highlighted content',
-    //                         })
-    //                     }
-    //                 })
-    //             }
-    //             setSections(list)
-    //         } catch (error) {
-    //             console.error('videos.tsx(fetchSections)', error)
-    //         }
-    //         setLoadingSections(false)
-    //         console.log('LOADING SECTIONS: ' + sections)
-    //     })()
-    // }, [])
-
     useEffect(() => {
-        console.log('VOD ASSETS:')
-        console.log(vodAssets)
-        console.log(loadingVodFiles)
-    }, [vodAssets, loadingVodFiles])
+        ;(async () => {
+            setLoadingSections(true)
+            try {
+                const data: Array<Section> = await api.fetchSections()
+                setSections(data)
+            } catch (error) {
+                console.error('videos.tsx(fetchSections)', error)
+            }
+            setLoadingSections(false)
+        })()
+    }, [])
 
     return (
         <Container>
@@ -127,11 +91,15 @@ const VideoPage = () => {
                 <Loader />
             ) : (
                 <OverflowContainer>
-                    <VideosSection
-                        key={'test'}
-                        section={'dogs'}
-                        vodAssets={vodAssets}
-                    />
+                    {sections?.map((_section) => {
+                        return (
+                            <VideosSection
+                                key={_section.id}
+                                section={_section.attributes.Name}
+                                vodAssets={vodAssets}
+                            />
+                        )
+                    })}
                 </OverflowContainer>
             )}
         </Container>

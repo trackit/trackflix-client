@@ -80,15 +80,15 @@ const VideosSection = ({ section, vodAssets }: SectionProps) => {
         const fAssets: Array<VideoInfo> = []
         const assets = vodAssets.filter((asset) => {
             let returnValue = false
-            asset.media?.sections?.forEach((mediaSection) => {
-                if (mediaSection === section) {
-                    returnValue = true
-                }
-            })
+            if (
+                asset.media?.sections != null &&
+                asset.media?.sections === section
+            ) {
+                returnValue = true
+            }
             return returnValue
         })
         assets.forEach((a) => {
-            console.log(a)
             fAssets.push({
                 thumbnail: {
                     obj: a.media.thumbnail,
@@ -99,10 +99,6 @@ const VideosSection = ({ section, vodAssets }: SectionProps) => {
         })
         setVideoInfos(fAssets)
     }, [])
-
-    useEffect(() => {
-        console.log(videoInfos, videoInfos.length)
-    })
 
     return videoInfos && videoInfos.length > 0 ? (
         <VideosSectionContainer>

@@ -5,6 +5,7 @@ import {
 } from './api.interface'
 import { IApi } from './IApi'
 import { StrapiMedia } from './strapi.interface'
+import { Section } from '../models'
 
 export class StrapiApi implements IApi {
     private readonly baseUrl: string
@@ -83,6 +84,17 @@ export class StrapiApi implements IApi {
         )
     }
 
+    async fetchSections(): Promise<Array<Section>> {
+        const response = await fetch(`${this.baseUrl}/api/genres`, {
+            headers: {
+                Authorization: `Bearer ${this.token}`,
+            },
+        })
+        const responseData = await response.json()
+        const result = responseData.data
+        return result as Array<Section>
+    }
+
     async fetchVodFiles(
         nextToken: string | null,
         fechThumbnails = false
@@ -90,7 +102,7 @@ export class StrapiApi implements IApi {
         const response = await fetch(
             `${this.baseUrl}/api/vods/?pagination[page]=${
                 nextToken ? parseInt(nextToken) : 1
-            }&populate=Thumbnails`,
+            }&populate[0]=Thumbnails&populate[1]=Genres`,
             {
                 headers: {
                     Authorization: `Bearer ${this.token}`,
@@ -98,6 +110,7 @@ export class StrapiApi implements IApi {
             }
         ).then((res) => res.json())
 
+        //handle null data case
         const videos: VideoOnDemand[] = await Promise.all(
             response.data.map((video: StrapiMedia) => {
                 const result = this.strapiMediaToVideoOnDemand(video)
