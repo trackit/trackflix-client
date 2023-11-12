@@ -110,7 +110,6 @@ export class StrapiApi implements IApi {
             }
         ).then((res) => res.json())
 
-        //handle null data case
         const videos: VideoOnDemand[] = await Promise.all(
             response.data.map((video: StrapiMedia) => {
                 const result = this.strapiMediaToVideoOnDemand(video)

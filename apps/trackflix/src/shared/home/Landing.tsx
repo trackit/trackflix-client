@@ -103,7 +103,6 @@ const Landing = () => {
     useEffect(() => {
         const fetchHighlited = async () => {
             const highlightedVideos = await api.fetchHighlightedVideos()
-            console.log(highlightedVideos)
             if (highlightedVideos && highlightedVideos.length > 0) {
                 const media = highlightedVideos[0]
                 setVideo(media)

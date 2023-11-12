@@ -28,7 +28,6 @@ const VideoPage = () => {
     const [sections, setSections] = useState<Array<Section> | null>(null)
     const [loadingVodFiles, setLoadingVodFiles] = useState<boolean>(false)
     const [loadingSections, setLoadingSections] = useState<boolean>(false)
-    // const [haveHighlightedContent, setHaveHighlightedContent] = useState(false)
 
     const { api } = useContext(CMSContext)
 
@@ -38,33 +37,7 @@ const VideoPage = () => {
             try {
                 const fetchedData = await api.fetchVodFiles(null, true)
                 const assets = fetchedData.data
-                console.log(assets)
                 setVodAssets(assets)
-                // if (
-                //     assets.findIndex(
-                //         (elem) => elem.media?.highlighted === true
-                //     ) ! "" == -1
-                // ) {
-                //     setHaveHighlightedContent(true)
-                // }
-                await Promise.all(
-                    assets.map(async (asset) => {
-                        if (asset.media?.thumbnail?.src != null) {
-                            thumbnailArr.push({
-                                obj: asset.media.thumbnail,
-                                url: asset.media.thumbnail.src,
-                            })
-                        } else {
-                            const data = await api.fetchThumbnail(asset.id)
-                            thumbnailArr.push({
-                                obj: data,
-                                url: data.src as string,
-                            })
-                        }
-                    })
-                )
-                setThumbnails(thumbnailArr)
-                */
             } catch (error) {
                 console.error('videos.tsx(fetchVodFiles):', error)
             }
