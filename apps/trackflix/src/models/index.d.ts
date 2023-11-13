@@ -56,11 +56,13 @@ export interface MediasSections {
 
 export interface Section {
   id: string;
-  label: string;
-  description: string;
-  medias?: (MediasSections | null)[];
-  createdAt?: string;
-  updatedAt?: string;
+  attributes: SectionAttributes;
+}
+
+export interface SectionAttributes {
+  Name: string,
+  createdAt: string,
+  updatedAt: string,
 }
 
 export interface Thumbnail {

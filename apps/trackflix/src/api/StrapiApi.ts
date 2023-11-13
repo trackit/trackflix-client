@@ -5,6 +5,7 @@ import {
 } from './api.interface'
 import { IApi } from './IApi'
 import { StrapiMedia } from './strapi.interface'
+import { Section } from '../models'
 
 export class StrapiApi implements IApi {
     private readonly baseUrl: string
@@ -40,16 +41,28 @@ export class StrapiApi implements IApi {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private strapiMediaToThumbnail(response: any): Thumbnail {
-        const thumbnailObj = response.attributes?.Thumbnails?.data[0]
-        const { createdAt, updatedAt } = thumbnailObj.attributes
-        const { thumbnail } = thumbnailObj?.attributes?.formats
+        if (response.attributes?.Thumbnails?.data != null) {
+            const thumbnailObj = response.attributes?.Thumbnails?.data[0]
+            const { createdAt, updatedAt } = thumbnailObj.attributes
+            const { thumbnail } = thumbnailObj?.attributes?.formats
 
-        return {
-            id: thumbnailObj.id,
-            ext: thumbnail.ext,
-            src: `${this.baseUrl}${thumbnail.url}`,
-            createdAt,
-            updatedAt,
+            const thumbnailFormated = {
+                id: `${thumbnailObj.id}`,
+                ext: thumbnail.ext,
+                src: `${this.baseUrl}${thumbnail.url}`,
+                createdAt,
+                updatedAt,
+            }
+            return thumbnailFormated
+        } else {
+            const defaultThumbnailFormated = {
+                id: '',
+                ext: '',
+                src: `${this.baseUrl}${''}`,
+                createdAt: '00-00-0000 00:00',
+                updatedAt: '00-00-0000 00:00',
+            }
+            return defaultThumbnailFormated
         }
     }
 
@@ -71,6 +84,17 @@ export class StrapiApi implements IApi {
         )
     }
 
+    async fetchSections(): Promise<Array<Section>> {
+        const response = await fetch(`${this.baseUrl}/api/genres`, {
+            headers: {
+                Authorization: `Bearer ${this.token}`,
+            },
+        })
+        const responseData = await response.json()
+        const result = responseData.data
+        return result as Array<Section>
+    }
+
     async fetchVodFiles(
         nextToken: string | null,
         fechThumbnails = false
@@ -78,7 +102,7 @@ export class StrapiApi implements IApi {
         const response = await fetch(
             `${this.baseUrl}/api/vods/?pagination[page]=${
                 nextToken ? parseInt(nextToken) : 1
-            }&populate=Thumbnails`,
+            }&populate[0]=Thumbnails&populate[1]=Genres`,
             {
                 headers: {
                     Authorization: `Bearer ${this.token}`,

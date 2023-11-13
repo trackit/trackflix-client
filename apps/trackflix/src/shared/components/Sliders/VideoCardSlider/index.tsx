@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import CSS from 'csstype'
-import { VideoOnDemand, Thumbnail } from '../../../../models'
+import { Thumbnail, VideoOnDemand } from '../../../../api/api.interface'
 import { defaultVideoCardProperties, screenSizes } from '../../../constants'
 import {
     NextArrow,
     PrevArrow,
 } from '../../Button/FloatingDirectionalArrowButtons'
 import { useWindowDimensions } from '../../../hooks'
-import VideoCard from '../../Card/VideoCard'
+import VideoCard, { VideoElement } from '../../Card/VideoCard'
 
 type VideoInfo = {
     thumbnail:
@@ -29,7 +29,11 @@ type Props = {
     redirectTo?: null | string
 }
 
-const SlidingContainer = styled.div`
+const SlidingContainer = styled.div<{
+    left: number
+    height: number
+    spaceBetweenItems: number
+}>`
     display: flex;
     height: ${({ height }) => height + 20}px;
     align-items: center;
@@ -39,7 +43,7 @@ const SlidingContainer = styled.div`
     gap: ${({ spaceBetweenItems }) => spaceBetweenItems}px;
 `
 
-const ListContainer = styled.div`
+const ListContainer = styled.div<{ height: number; padding: number }>`
     display: flex;
     align-items: center;
     height: ${({ height }) => height + 20}px;
@@ -93,10 +97,16 @@ const VideoCardList = ({
                 spaceBetweenItems={spaceBetweenItems}
             >
                 {videoInfos.map((videoInfo, index: number) => {
+                    const video = {
+                        vod: videoInfo?.vod,
+                        thumbnail: videoInfo?.thumbnail,
+                    }
                     return (
                         <VideoCard
-                            key={videoInfo.vod?.id + index}
-                            video={videoInfo}
+                            key={
+                                videoInfo?.vod?.id || 'SlidingContainer' + index
+                            }
+                            video={video as VideoElement}
                             redirectTo={redirectTo}
                             cardWidth={cardProperties.width}
                             cardHeight={cardProperties.height}

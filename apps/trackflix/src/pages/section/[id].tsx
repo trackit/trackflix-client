@@ -135,6 +135,11 @@ const ChannelLogo = styled.div`
     left: -20px;
 `
 
+const capitalizeFirstLetter = (input: string) => {
+    input = input.toLowerCase()
+    return input.charAt(0).toUpperCase() + input.slice(1)
+}
+
 const SectionPage = (props: PageProps) => {
     const id = props.params.id
     const [section, setSection] = useState<string | null>(null)
@@ -155,7 +160,9 @@ const SectionPage = (props: PageProps) => {
 
     useEffect(() => {
         ;(async () => {
-            setSection(id) // FETCH FROM API
+            const sectionId = capitalizeFirstLetter(id)
+            console.log(sectionId)
+            setSection(sectionId)
         })()
     }, [id])
 
@@ -166,13 +173,14 @@ const SectionPage = (props: PageProps) => {
                 const fetchedVodAssets = data?.data
                 const assets = fetchedVodAssets.filter((asset) => {
                     let returnValue = false
-                    // eslint-disable-next-line
-                    if (asset.media.genre === section) {
+                    if (
+                        asset.media.genre.toLowerCase() ===
+                        section?.toLowerCase()
+                    ) {
                         returnValue = true
                     }
                     return returnValue
                 })
-                console.log('==>', assets[0])
                 setVodAssets(assets)
                 const thumbnailArr: Array<{
                     obj: Thumbnail | undefined
@@ -187,7 +195,6 @@ const SectionPage = (props: PageProps) => {
                             })
                         } else {
                             const data = await api.fetchThumbnail(asset.id)
-                            console.log(data)
                             thumbnailArr.push({
                                 obj: data,
                                 url: data.src || '',
