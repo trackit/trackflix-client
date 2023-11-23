@@ -43,13 +43,13 @@ const Separator = styled.div`
     margin-bottom: 20px;
 `
 
-const Description = styled.h2`
-    font-size: 18px;
-    color: #ffffff;
-    max-width: 1000px;
-    text-align: center;
-    margin: 0 50px;
-`
+// const Description = styled.h2`
+//     font-size: 18px;
+//     color: #ffffff;
+//     max-width: 1000px;
+//     text-align: center;
+//     margin: 0 50px;
+// `
 
 const LoaderWrapper = styled.div`
     padding-top: 50px;
@@ -236,98 +236,107 @@ const SectionPage = (props: PageProps) => {
                     </Header>
                     <SplitScreenContainer>
                         {thumbnails.length > 0 && (
-                        <SplitScreen>
-                            <LeftPanel>
-                                {vodAssets.map((vod) => {
-                                    const thumbnail = thumbnails.find(
-                                        (thumb) => thumb.obj?.id ===
-                                            vod.media?.thumbnail?.id
-                                    )
-                                    const video = {
-                                        vod,
-                                        thumbnail,
-                                    }
-                                    return (
-                                        <VideoCardContainer key={vod.id}>
-                                            <VideoCard
-                                                video={video as VideoElement}
-                                                videoInfos={
-                                                    cardProperties.infos
-                                                }
-                                                cardWidth={cardProperties.width}
-                                                cardHeight={
-                                                    cardProperties.height
-                                                }
-                                            >
-                                                {width > screenSizes.m && (
-                                                    <>
-                                                        <ChannelLogo>
-                                                            <TrackitLogo width="25" />
-                                                        </ChannelLogo>
-                                                        <div>
-                                                            <LeftPanelItemContentTitle>
-                                                                {
-                                                                    vod.media
-                                                                        ?.title
-                                                                }
-                                                            </LeftPanelItemContentTitle>
-                                                            <LinesEllipsis
-                                                                text={
-                                                                    vod.media
-                                                                        ?.description
-                                                                }
-                                                                maxLine="5"
-                                                                ellipsis="..."
-                                                                trimRight
-                                                                style={{
-                                                                    fontSize:
-                                                                        '14px',
-                                                                    color: '#FFFFFF',
-                                                                }}
-                                                                basedOn="letters"
-                                                            />
-                                                        </div>
-                                                        <div>
-                                                            <LeftPanelItemContentAuthor>
-                                                                {
-                                                                    vod.media
-                                                                        ?.author
-                                                                }
-                                                            </LeftPanelItemContentAuthor>
-                                                            <LeftPanelItemContentCountDate>
-                                                                {vod.media
-                                                                    ?.viewCount ||
-                                                                    0}{' '}
-                                                                views -{' '}
-                                                                {moment(
-                                                                    vod.media
-                                                                        ?.createdAt
-                                                                ).fromNow()}
-                                                            </LeftPanelItemContentCountDate>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </VideoCard>
-                                        </VideoCardContainer>
-                                    )
-                                })}
-                            </LeftPanel>
-                            <RightPanel>
-                                {[
-                                    KEY_SORT_BY_MOST_VIEWED,
-                                    KEY_SORT_BY_MOST_RECENT,
-                                ].map((key, index) => (
-                                    <SectionVideosSorted
-                                        key={key + index}
-                                        videos={vodAssets}
-                                        thumbnails={thumbnails}
-                                        sortBy={key}
-                                        cardProperties={cardProperties}
-                                    />
-                                ))}
-                            </RightPanel>
-                        </SplitScreen>
-                    )}
+                            <SplitScreen>
+                                <LeftPanel>
+                                    {vodAssets.map((vod) => {
+                                        const thumbnail = thumbnails.find(
+                                            (thumb) =>
+                                                thumb.obj?.id ===
+                                                vod.media?.thumbnail?.id
+                                        )
+                                        const video = {
+                                            vod,
+                                            thumbnail,
+                                        }
+                                        return (
+                                            <VideoCardContainer key={vod.id}>
+                                                <VideoCard
+                                                    video={
+                                                        video as VideoElement
+                                                    }
+                                                    videoInfos={
+                                                        cardProperties.infos
+                                                    }
+                                                    cardWidth={
+                                                        cardProperties.width
+                                                    }
+                                                    cardHeight={
+                                                        cardProperties.height
+                                                    }
+                                                >
+                                                    {width > screenSizes.m && (
+                                                        <>
+                                                            <ChannelLogo>
+                                                                <TrackitLogo width="25" />
+                                                            </ChannelLogo>
+                                                            <div>
+                                                                <LeftPanelItemContentTitle>
+                                                                    {
+                                                                        vod
+                                                                            .media
+                                                                            ?.title
+                                                                    }
+                                                                </LeftPanelItemContentTitle>
+                                                                <LinesEllipsis
+                                                                    text={
+                                                                        vod
+                                                                            .media
+                                                                            ?.description
+                                                                    }
+                                                                    maxLine="5"
+                                                                    ellipsis="..."
+                                                                    trimRight
+                                                                    style={{
+                                                                        fontSize:
+                                                                            '14px',
+                                                                        color: '#FFFFFF',
+                                                                    }}
+                                                                    basedOn="letters"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <LeftPanelItemContentAuthor>
+                                                                    {
+                                                                        vod
+                                                                            .media
+                                                                            ?.author
+                                                                    }
+                                                                </LeftPanelItemContentAuthor>
+                                                                <LeftPanelItemContentCountDate>
+                                                                    {vod.media
+                                                                        ?.viewCount ||
+                                                                        0}{' '}
+                                                                    views -{' '}
+                                                                    {moment(
+                                                                        vod
+                                                                            .media
+                                                                            ?.createdAt
+                                                                    ).fromNow()}
+                                                                </LeftPanelItemContentCountDate>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </VideoCard>
+                                            </VideoCardContainer>
+                                        )
+                                    })}
+                                </LeftPanel>
+                                <RightPanel>
+                                    {[
+                                        KEY_SORT_BY_MOST_VIEWED,
+                                        KEY_SORT_BY_MOST_RECENT,
+                                    ].map((key, index) => (
+                                        <SectionVideosSorted
+                                            key={key + index}
+                                            videos={vodAssets}
+                                            thumbnails={thumbnails}
+                                            sortBy={key}
+                                            cardProperties={cardProperties}
+                                        />
+                                    ))}
+                                </RightPanel>
+                            </SplitScreen>
+                        )}
                     </SplitScreenContainer>
                 </Container>
             ) : (

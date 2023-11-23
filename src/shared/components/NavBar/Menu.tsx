@@ -35,6 +35,7 @@ const MenuContainer = styled.div<{ light: boolean }>`
 `
 
 interface MenuProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     navbarTheme: any
     navBarHeight: number
     minHeight: number

@@ -27,7 +27,6 @@ const VideoPage = () => {
     const [vodAssets, setVodAssets] = useState<VideoOnDemand[]>([])
     const [sections, setSections] = useState<Array<Section> | null>(null)
     const [loadingVodFiles, setLoadingVodFiles] = useState<boolean>(false)
-    const [loadingSections, setLoadingSections] = useState<boolean>(false)
 
     const { api } = useContext(CMSContext)
 
@@ -47,14 +46,12 @@ const VideoPage = () => {
 
     useEffect(() => {
         ;(async () => {
-            setLoadingSections(true)
             try {
                 const data: Array<Section> = await api.fetchSections()
                 setSections(data)
             } catch (error) {
                 console.error('videos.tsx(fetchSections)', error)
             }
-            setLoadingSections(false)
         })()
     }, [])
 

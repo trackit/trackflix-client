@@ -21,7 +21,8 @@ export default class Index extends React.Component<videojs.PlayerOptions> {
     }
 
     componentDidMount() {
-        this.player = videojs(this.videoNode!, this.options).ready(function () {
+        if (!this.videoNode) return
+        this.player = videojs(this.videoNode, this.options).ready(function () {
             return
         })
     }
