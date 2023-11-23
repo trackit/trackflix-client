@@ -24,3 +24,8 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+yarn-error.log
+public
+
+.env.*

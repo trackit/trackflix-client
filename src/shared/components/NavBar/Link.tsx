@@ -21,7 +21,7 @@ const LinkText = styled.span`
     color: inherit;
 `
 
-const Item = styled.li`
+const Item = styled.li<{ borderHeight: number; dropdownmode: boolean }>`
     display: flex;
     white-space: nowrap;
     cursor: pointer;
@@ -63,6 +63,7 @@ type HeaderLinkProps = {
     isExternal?: boolean
     navBarHeight: number
     dropdownmode: boolean
+    navBarMinHeight: number
 }
 
 const HeaderLink = ({
@@ -74,6 +75,7 @@ const HeaderLink = ({
     navBarMinHeight,
     dropdownmode,
 }: HeaderLinkProps) => {
+    dropdownmode
     const borderHeight = (navBarHeight - navBarMinHeight) / 8 + 2
     if (isExternal)
         return (
@@ -87,7 +89,6 @@ const HeaderLink = ({
                     href={to}
                     target="_blank"
                     rel="noopener noreferrer"
-                    dropdownmode={dropdownmode}
                 >
                     <LinkText>{content}</LinkText>
                 </ExternalLink>
@@ -99,7 +100,7 @@ const HeaderLink = ({
             borderHeight={borderHeight}
             dropdownmode={dropdownmode}
         >
-            <InternalLink dropdownmode={dropdownmode} to={to} theme={theme}>
+            <InternalLink to={to} theme={theme}>
                 <LinkText>{content}</LinkText>
             </InternalLink>
         </Item>

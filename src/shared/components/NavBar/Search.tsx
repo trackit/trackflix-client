@@ -12,9 +12,10 @@ type SearchTextProps = {
 type SearchProps = {
     to: string
     theme: NavbarTheme
+    dropdownmode: boolean
 }
 
-const SearchWrapper = styled.div`
+const SearchWrapper = styled.div<{ dropdownmode: boolean }>`
     display: flex;
     align-items: center;
     margin-left: ${({ dropdownmode }) => (dropdownmode ? 0 : '20px')};

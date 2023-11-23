@@ -1,6 +1,7 @@
 {
   "name": "trackflix",
   "version": "1.0.0",
+  "license": "MIT",
   "private": true,
   "description": "trackflix",
   "author": "florian-vuillemot",

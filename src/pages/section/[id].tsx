@@ -161,7 +161,6 @@ const SectionPage = (props: PageProps) => {
     useEffect(() => {
         ;(async () => {
             const sectionId = capitalizeFirstLetter(id)
-            console.log(sectionId)
             setSection(sectionId)
         })()
     }, [id])
@@ -185,20 +184,19 @@ const SectionPage = (props: PageProps) => {
                 const thumbnailArr: Array<{
                     obj: Thumbnail | undefined
                     url: string
-                }> = []
-                await Promise.all(
+                }> = await Promise.all(
                     assets.map(async (asset) => {
                         if (asset.media?.thumbnail?.src) {
-                            thumbnailArr.push({
+                            return {
                                 obj: asset.media.thumbnail,
                                 url: asset.media.thumbnail.src,
-                            })
+                            }
                         } else {
                             const data = await api.fetchThumbnail(asset.id)
-                            thumbnailArr.push({
+                            return {
                                 obj: data,
                                 url: data.src || '',
-                            })
+                            }
                         }
                     })
                 )
@@ -237,12 +235,12 @@ const SectionPage = (props: PageProps) => {
                         {/* <Description>{section}</Description> */}
                     </Header>
                     <SplitScreenContainer>
+                        {thumbnails.length > 0 && (
                         <SplitScreen>
                             <LeftPanel>
                                 {vodAssets.map((vod) => {
                                     const thumbnail = thumbnails.find(
-                                        (thumb) =>
-                                            thumb.obj?.id ===
+                                        (thumb) => thumb.obj?.id ===
                                             vod.media?.thumbnail?.id
                                     )
                                     const video = {
@@ -329,6 +327,7 @@ const SectionPage = (props: PageProps) => {
                                 ))}
                             </RightPanel>
                         </SplitScreen>
+                    )}
                     </SplitScreenContainer>
                 </Container>
             ) : (

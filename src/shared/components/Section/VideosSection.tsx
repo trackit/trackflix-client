@@ -79,7 +79,6 @@ const VideosSection = ({ section, vodAssets }: SectionProps) => {
     useEffect(() => {
         const fAssets: Array<VideoInfo> = []
         const assets = vodAssets.filter((asset) => {
-            console.log(vodAssets)
             let returnValue = false
             if (asset.media?.genre != null && asset.media?.genre === section) {
                 returnValue = true

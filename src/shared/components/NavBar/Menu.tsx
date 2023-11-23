@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { Auth } from 'aws-amplify'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import HeaderLink from './Link'
 import Search from './Search'
@@ -16,7 +15,7 @@ const RightItemsWrapper = styled.div`
     align-items: center;
 `
 
-const MenuContainer = styled.div`
+const MenuContainer = styled.div<{ light: boolean }>`
     box-sizing: border-box;
     aspect-ratio: 1 / 1;
     border-radius: 7px;
@@ -35,22 +34,15 @@ const MenuContainer = styled.div`
     }
 `
 
-const Menu = ({ navbarTheme, navBarHeight, minHeight }) => {
-    const [groups, setGroups] = useState<Array<string>>([])
+interface MenuProps {
+    navbarTheme: any
+    navBarHeight: number
+    minHeight: number
+}
+
+const Menu = ({ navbarTheme, navBarHeight, minHeight }: MenuProps) => {
     const [hovered, setHovered] = useState(false)
     const { width } = useWindowDimensions()
-
-    // useEffect(() => {
-    //     Auth.Credentials.get().then(() => {
-    //         if (Auth.Credentials.getCredSource() === 'userPool') {
-    //             Auth.currentSession().then((data) => {
-    //                 const groupsData =
-    //                     data.getIdToken().payload['cognito:groups']
-    //                 if (groupsData !== undefined) setGroups(groupsData)
-    //             })
-    //         }
-    //     })
-    // }, [])
 
     const dropdownmode = width <= screenSizes.m
 
@@ -71,22 +63,6 @@ const Menu = ({ navbarTheme, navBarHeight, minHeight }) => {
             dropdownmode={dropdownmode}
         />,
     ]
-
-    if (groups.includes('Admin')) {
-        ButtonsList.splice(
-            1,
-            0,
-            <HeaderLink
-                theme={navbarTheme}
-                navBarHeight={navBarHeight}
-                navBarMinHeight={minHeight}
-                to="/admin"
-                content="Admin"
-                key="admin"
-                dropdownmode={dropdownmode}
-            />
-        )
-    }
 
     if (dropdownmode)
         return (

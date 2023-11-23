@@ -21,7 +21,7 @@ const VideoPlayer = ({ video }: VideoPlayerProps) => {
         sources: [
             {
                 src: `${video?.src}`,
-                type: 'application/x-mpegURL',
+                type: 'video/mp4',
             },
         ],
     }

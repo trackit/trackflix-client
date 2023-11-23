@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-const DropdownContainer = styled.div`
+const DropdownContainer = styled.div<{ height: string }>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +9,7 @@ const DropdownContainer = styled.div`
     height: ${({ height }) => height};
 `
 
-const ListContainer = styled.div`
+const ListContainer = styled.div<{ height: number }>`
     position: absolute;
     width: 200px;
     top: calc(100% + 10px);
@@ -65,7 +65,13 @@ const ScreenLayout = styled.div`
     height: 100vh;
 `
 
-const Dropdown = ({ children, height, list = [] }) => {
+interface DropdownProps {
+    children: React.ReactNode
+    height: string
+    list?: React.ReactNode[]
+}
+
+const Dropdown = ({ children, height, list = [] }: DropdownProps) => {
     const [displayList, setDisplayList] = useState(false)
 
     return (
