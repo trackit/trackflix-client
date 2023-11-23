@@ -8,7 +8,7 @@ import {
     VideoOnDemand,
 } from '../../../api/api.interface'
 
-interface VideoStatus {
+export interface VideoStatus {
     playing: boolean
     played: number
     loaded: number

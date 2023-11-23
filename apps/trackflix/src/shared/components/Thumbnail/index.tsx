@@ -1,10 +1,16 @@
 import React, { useRef } from 'react'
 import ReactPlayer from 'react-player'
-import awsvideoconfig from '../../../aws-video-exports'
 import styled from 'styled-components'
 import PlayLogo from '../../../assets/logo/logo-play.svg'
+import { VideoElement, VideoStatus } from '../Card/VideoCard'
 
-const ThumbnailContainer = styled.div`
+const ThumbnailContainer = styled.div<{
+    thumbUrl?: string
+    hover?: boolean
+    width?: number
+    height?: number
+    playing?: boolean
+}>`
     position: relative;
     background-image: ${(props) =>
         props.playing || !props.thumbUrl ? 'none' : `url(${props.thumbUrl})`};
@@ -21,7 +27,7 @@ const ThumbnailContainer = styled.div`
     }
 `
 
-const TransparentOverlay = styled.div`
+const TransparentOverlay = styled.div<{ visible: boolean }>`
     position: absolute;
     display: flex;
     justify-content: center;
@@ -35,18 +41,26 @@ const TransparentOverlay = styled.div`
     opacity: ${(props) => (props.visible ? 1 : 0)};
 `
 
-const Thumbnail = ({ video, videoStatus, loadVideo = true, width, height }) => {
+interface ThumbnailProps {
+    video: VideoElement
+    videoStatus: VideoStatus
+    loadVideo?: boolean
+    width: number
+    height: number
+}
+
+const Thumbnail = ({
+    video,
+    videoStatus,
+    loadVideo = true,
+    width,
+    height,
+}: ThumbnailProps) => {
     const playerRef = useRef<ReactPlayer>(null)
 
     return (
         <ThumbnailContainer
-            thumbUrl={
-                video.vod
-                    ? video.vod?.media?.source === 'SELF'
-                        ? video.thumbnail?.url
-                        : video.thumbnail?.obj?.src
-                    : `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`
-            }
+            thumbUrl={video.thumbnail.obj.src}
             hover={videoStatus.playing}
             width={width}
             height={height}
@@ -57,13 +71,7 @@ const Thumbnail = ({ video, videoStatus, loadVideo = true, width, height }) => {
                     style={{ opacity: videoStatus.playing ? '1' : '0' }}
                     width="100%"
                     height="100%"
-                    url={
-                        video.vod
-                            ? video.vod?.media?.source === 'SELF'
-                                ? `https://${awsvideoconfig.awsOutputVideo}/public/${video.vod?.id}/${video.vod?.id}_325.m3u8`
-                                : video.vod?.src
-                            : video.url
-                    }
+                    url={video.vod.src}
                     controls={false}
                     playing={videoStatus.playing}
                     muted

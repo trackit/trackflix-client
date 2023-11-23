@@ -83,14 +83,10 @@ type VideoItemProps = {
 }
 
 const VideoItem = ({ vod }: VideoItemProps) => {
-    const [thumbnail, setThumbnail] =
-        useState<
-            | {
-                  obj: Thumbnail
-                  url: string
-              }
-            | undefined
-        >(undefined)
+    const [thumbnail, setThumbnail] = useState<{
+        obj: Thumbnail
+        url: string
+    }>()
     const { width } = useWindowDimensions()
     const videoCardProperties = useMemo(() => {
         if (defaultVideoCardProperties.width > width - 100) {
@@ -120,12 +116,17 @@ const VideoItem = ({ vod }: VideoItemProps) => {
 
     return (
         <StyledVideoCard>
-            <VideoCard
-                video={{ vod, thumbnail }}
-                cardWidth={videoCardProperties.width}
-                cardHeight={videoCardProperties.height}
-                videoInfos={videoCardProperties.infos}
-            />
+            {thumbnail && (
+                <VideoCard
+                    video={{
+                        vod,
+                        thumbnail,
+                    }}
+                    cardWidth={videoCardProperties.width}
+                    cardHeight={videoCardProperties.height}
+                    videoInfos={videoCardProperties.infos}
+                />
+            )}
         </StyledVideoCard>
     )
 }
