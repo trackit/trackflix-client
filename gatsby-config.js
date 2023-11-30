@@ -23,6 +23,14 @@ module.exports = {
                 },
             },
         },
+        {
+            resolve: `gatsby-plugin-hotjar`,
+            options: {
+                includeInDevelopment: false, // set to true to include script in development
+                id: process.env.HOTJAR_ID,
+                sv: process.env.HOTJAR_VERSION,
+            },
+        },
         'gatsby-plugin-image',
         'gatsby-plugin-react-helmet',
         'gatsby-plugin-sharp',
