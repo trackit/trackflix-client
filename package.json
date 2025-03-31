@@ -57,6 +57,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.2.0",
     "react-image-file-resizer": "^0.4.7",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-lines-ellipsis": "^0.15.0",
     "react-loader-spinner": "^4.0.0",
     "react-modal": "^3.14.3",
