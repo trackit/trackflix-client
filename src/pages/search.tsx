@@ -9,6 +9,7 @@ import { screenSizes, defaultVideoCardProperties } from '../shared/constants'
 import { useWindowDimensions } from '../shared/hooks'
 import { CMSContext } from '../context/CMSContext'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import Loader from '../shared/components/Loader'
 
 const StyledSearchItem = styled.div`
     display: flex;
@@ -187,7 +188,7 @@ const SearchPage = () => {
                 dataLength={vodAssets.length}
                 next={fetchData}
                 hasMore={nextToken !== null}
-                loader={<h4>Loading...</h4>}
+                loader={<Loader />}
             >
                 <StyledVideoList>
                     {vodAssets
