@@ -42,7 +42,7 @@ export class StrapiApi implements IApi {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private strapiMediaToThumbnail(response: any): Thumbnail {
         const isURL = (url: string) => {
-            const urlPattern = /^https?:\/\/.+$/i;
+            const urlPattern = /^https?:\/\/.+$/i
             return urlPattern.test(url)
         }
 
@@ -56,7 +56,9 @@ export class StrapiApi implements IApi {
                 ext: thumbnail.ext,
                 // The src can be either an url or a path
                 // ie. src: 'https://example.com/image.jpg' or src: '/image.jpg'
-                src: isURL(thumbnail.url) ? thumbnail.url : `${this.baseUrl}${thumbnail.url}`,
+                src: isURL(thumbnail.url)
+                    ? thumbnail.url
+                    : `${this.baseUrl}${thumbnail.url}`,
                 createdAt,
                 updatedAt,
             }
