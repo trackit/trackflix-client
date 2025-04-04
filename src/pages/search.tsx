@@ -8,6 +8,8 @@ import VideoCard from '../shared/components/Card/VideoCard'
 import { screenSizes, defaultVideoCardProperties } from '../shared/constants'
 import { useWindowDimensions } from '../shared/hooks'
 import { CMSContext } from '../context/CMSContext'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import Loader from '../shared/components/Loader'
 
 const StyledSearchItem = styled.div`
     display: flex;
@@ -133,7 +135,7 @@ const VideoItem = ({ vod }: VideoItemProps) => {
 
 const SearchPage = () => {
     const [vodAssets, setVodAssets] = useState<Array<VideoOnDemand>>([])
-    const [nextToken, setNextToken] = useState<string | null>(null)
+    const [nextToken, setNextToken] = useState<string | null>('')
     const [searchValue, setSearchValue] = useState<string>('')
     const { width } = useWindowDimensions()
     const { api } = useContext(CMSContext)
@@ -144,17 +146,28 @@ const SearchPage = () => {
             ?.toLowerCase()
             .includes(searchValue.toLowerCase())
 
+    const fetchData = async () => {
+        if (nextToken === null) {
+            return
+        }
+        try {
+            const response = await api.fetchVodFiles(
+                nextToken === '' ? null : nextToken,
+                undefined
+            )
+            setNextToken(response?.nextToken ? response?.nextToken : null)
+            setVodAssets([...vodAssets, ...response.data])
+            console.log(nextToken)
+        } catch (error) {
+            console.error('search.tsx(fetchVodFiles):', error)
+        }
+    }
+
     useEffect(() => {
-        ;(async () => {
-            try {
-                const response = await api.fetchVodFiles(nextToken)
-                setNextToken(response?.nextToken ? response?.nextToken : null)
-                setVodAssets(response.data)
-            } catch (error) {
-                console.error('search.tsx(fetchVodFiles):', error)
-            }
-        })()
-    }, [nextToken])
+        setVodAssets([])
+        setNextToken('')
+        fetchData()
+    }, [])
 
     return (
         <Layout>
@@ -171,13 +184,20 @@ const SearchPage = () => {
                     </StyledSearch>
                 )}
             </StyledSearchItem>
-            <StyledVideoList>
-                {vodAssets
-                    .filter(filterAssets)
-                    .map((elem: VideoOnDemand, key) => {
-                        return <VideoItem vod={elem} key={key} />
-                    })}
-            </StyledVideoList>
+            <InfiniteScroll
+                dataLength={vodAssets.length}
+                next={fetchData}
+                hasMore={nextToken !== null}
+                loader={<Loader />}
+            >
+                <StyledVideoList>
+                    {vodAssets
+                        .filter(filterAssets)
+                        .map((elem: VideoOnDemand, key) => {
+                            return <VideoItem vod={elem} key={key} />
+                        })}
+                </StyledVideoList>
+            </InfiniteScroll>
         </Layout>
     )
 }
